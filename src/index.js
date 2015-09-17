@@ -10,7 +10,7 @@ import configureStore from './store';
 import App from './containers/app';
 
 
-const history = createHistory('/connections/list');
+const history = createHistory('/server/list');
 const store = configureStore();
 
 
@@ -30,10 +30,10 @@ render(
   <Provider store={store}>
     <Router history={history}>
       <Route component={App}>
-        <Route path="/connections/list"
-          component={require('./containers/connections-list')} />
-        <Route path="/connections/add"
-          component={require('./containers/connections-add')} />
+        <Route path="/server/list"
+          component={require('./containers/server-list')} />
+        <Route path="/server/add"
+          component={require('./containers/server-add')} />
       </Route>
     </Router>
   </Provider>

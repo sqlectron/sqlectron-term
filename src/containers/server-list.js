@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { loadConnections } from '../actions';
+import { loadServerList } from '../actions/servers';
 
 
 const style = {
@@ -11,13 +11,13 @@ const style = {
 };
 
 
-export default class Connections extends Component {
+class ServerList extends Component {
 
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     loading: PropTypes.bool.isRequired,
     error: PropTypes.any,
-    connections: PropTypes.array,
+    servers: PropTypes.array,
   };
 
   static contextTypes = {
@@ -26,7 +26,7 @@ export default class Connections extends Component {
 
   componentDidMount () {
     const { dispatch } = this.props;
-    dispatch(loadConnections());
+    dispatch(loadServerList());
     if (this.refs.list) this.refs.list.focus();
   }
 
@@ -35,29 +35,29 @@ export default class Connections extends Component {
   }
 
   onItemSelected (e, i) {
-    if (!i) return this.context.history.pushState(null, '/connections/add');
+    if (!i) return this.context.history.pushState(null, '/server/add');
   }
 
   render () {
-    const { loading, connections, error } = this.props;
+    const { loading, servers, error } = this.props;
     if (error) {
       return (
         <box
           left="center" top="center" shrink="true" style={style.error}>
-          failed to retrieve list of connections
+          failed to retrieve list of servers
         </box>
       );
     }
     if (loading) {
       return (
         <box left="center" top="center" shrink="true">
-          loading list of connections...
+          loading list of servers...
         </box>
       );
     }
 
-    const items = connections.map(c => c.name).sort();
-    items.unshift('Add new connection...');
+    const items = servers.map(c => c.name).sort();
+    items.unshift('Add new server...');
     return (
       <list
         ref="list"
@@ -65,7 +65,7 @@ export default class Connections extends Component {
         border={{ type: 'line' }}
         keys="true"
         mouse="true"
-        label="Connections list"
+        label="Server list"
         scrollbar={{
           ch: ' ',
           track: { bg: 'cyan' },
@@ -81,5 +81,5 @@ export default class Connections extends Component {
 
 
 export default connect(
-  state => state.connections
-)(Connections);
+  state => state.servers
+)(ServerList);
