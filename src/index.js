@@ -8,6 +8,7 @@ import routes from './routes';
 const screen = blessed.screen({
   autoPadding: true,
   smartCSR: true,
+  dockBorders: true,
   title: 'SQLectron',
 });
 
