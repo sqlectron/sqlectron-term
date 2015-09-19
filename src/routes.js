@@ -13,10 +13,15 @@ export default
   <Provider store={store}>
     <Router history={history}>
       <Route component={require('./containers/app')}>
-        <Route path="/server/list"
+        <Route path="server/list"
           component={require('./containers/server-list')} />
-        <Route path="/server/add"
+        <Route path="server/add"
           component={require('./containers/server-add')} />
+        <Route path="server/:id/database/:database"
+          component={require('./containers/database')}>
+          <Route path="query"
+            component={require('./containers/database-query')} />
+        </Route>
       </Route>
     </Router>
   </Provider>
