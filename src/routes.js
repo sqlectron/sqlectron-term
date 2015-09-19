@@ -2,11 +2,10 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { Router, Route } from 'react-router';
 
-import createHistory from './history/create-term-history';
+import history from './history';
 import configureStore from './store';
 
 
-const history = createHistory('/server/list');
 const store = configureStore();
 
 

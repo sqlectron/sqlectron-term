@@ -3,6 +3,7 @@ import blessed from 'blessed';
 import { render } from 'react-blessed';
 
 import routes from './routes';
+import history from './history';
 
 
 const screen = blessed.screen({
@@ -12,6 +13,14 @@ const screen = blessed.screen({
   title: 'SQLectron',
 });
 
+
+screen.key(['escape'], () => {
+  try {
+    history.goBack();
+  } catch (e) {
+    process.exit(0);
+  }
+});
 
 screen.key(['q', 'C-c'], () => {
   process.exit(0);
