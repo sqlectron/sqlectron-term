@@ -45,6 +45,7 @@
     "babel-runtime": "^5.8.24",
     "blessed": "^0.1.81",
     "history": "^1.9.1",
+    "is-my-json-valid": "^2.12.2",
     "react": "^0.14.0-rc1",
     "react-blessed": "^0.1.3",
     "react-redux": "^2.1.2",

@@ -1,7 +1,10 @@
 import fs from 'fs';
 import path from 'path';
+import validator from 'is-my-json-valid';
 
 import { homedir } from '../utils';
+
+const serversValidate = validator(require('./servers.schema.json'));
 
 
 export async function loadServerListFromFile () {
@@ -9,7 +12,11 @@ export async function loadServerListFromFile () {
   if (!await fileExists(filename)) {
     await createFile(filename, { servers: [] });
   }
-  return await readFile(filename);
+  const result = await readFile(filename);
+  if (!serversValidate(result)) {
+    throw new Error('Invalid ~/.sqlectron.json file format');
+  }
+  return result;
 }
 
 
