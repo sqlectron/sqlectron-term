@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { loadServerList } from '../actions/servers';
 import { setStatus, clearStatus } from '../actions/status';
+import { setShortcuts, clearShortcuts } from '../actions/shortcuts';
 
 
 const style = {
@@ -29,6 +30,10 @@ class ServerList extends Component {
   componentWillMount () {
     const { dispatch, loading } = this.props;
     if (loading) dispatch(setStatus('Loading list of servers...'));
+    dispatch(setShortcuts([
+      { key: 'A', label: 'Add new' },
+      { key: 'Enter', label: 'Connect' },
+    ]));
     dispatch(loadServerList());
   }
 
@@ -40,21 +45,40 @@ class ServerList extends Component {
       const [ server ] = servers;
       dispatch(setStatus(server
         ? `${server.client} server at ${server.host}:${server.port}`
-        : 'No servers found, add a new one.'
+        : 'No servers found.'
       ));
     }
   }
 
   componentDidUpdate () {
-    this.refs.list.focus();
+    if (this.refs.list) this.refs.list.focus();
   }
 
   componentWillUnmount () {
-    this.props.dispatch(clearStatus());
+    const { dispatch } = this.props;
+    dispatch(clearShortcuts());
+    dispatch(clearStatus());
   }
 
-  onItemSelected (e, i) {
-    // if (i === 0) return this.context.history.pushState(null, '/server/add');
+  onKeypress (ch, key) {
+    const { history } = this.context;
+    const { servers } = this.props;
+
+    switch (key.name) {
+    case 'enter': {
+      if (!servers || !servers.length) return;
+      const serverId = this.refs.list.selected;
+      const server = servers[serverId];
+      const route = `/server/${serverId}/database/${server.database}/query`;
+      history.pushState(null, route);
+      break;
+    }
+    case 'a': {
+      history.pushState(null, '/server/add');
+      break;
+    }
+    default: return;
+    }
   }
 
   onSelectItem () {
@@ -85,7 +109,7 @@ class ServerList extends Component {
               style: { inverse: true },
             }}
             items={items}
-            onSelect={::this.onItemSelected}
+            onKeypress={::this.onKeypress}
             {...{ 'onSelect Item': ::this.onSelectItem } }
       />
     );
