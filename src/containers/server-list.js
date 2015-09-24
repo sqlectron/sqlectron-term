@@ -91,8 +91,11 @@ class ServerList extends Component {
 
   onSelectItem () {
     const server = this.props.servers[this.refs.list.selected];
+    const host = server.host
+      ? `${server.host}:${server.port}`
+      : server.socketPath;
     this.props.dispatch(
-      setStatus(`${server.client} server at ${server.host}:${server.port}`)
+      setStatus(`${server.client} server at ${host}`)
     );
   }
 
