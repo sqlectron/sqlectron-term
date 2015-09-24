@@ -17,6 +17,8 @@ export default
           component={require('./containers/server-list')} />
         <Route path="server/add"
           component={require('./containers/server-add')} />
+        <Route path="server/:id/edit"
+          component={require('./containers/server-edit')} />
         <Route path="server/:id/database/:database"
           component={require('./containers/database')}>
           <Route path="query"

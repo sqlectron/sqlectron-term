@@ -38,6 +38,24 @@ export async function addServer (server) {
 }
 
 
+export async function updateServer (id, server) {
+  const filename = path.join(homedir(), '.sqlectron.json');
+  const data = await readFile(filename);
+
+  const obj = copyObject(server);
+  if (!obj) return null;
+
+  data.servers[id] = obj;
+  if (!serversValidate(data)) {
+    throw new Error('Invalid server definition');
+  }
+
+  await createFile(filename, data);
+
+  return obj;
+}
+
+
 function copyObject (obj) {
   const result = {};
   Object.keys(obj).forEach(k => {

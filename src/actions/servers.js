@@ -9,6 +9,10 @@ export const ADD_SERVER_REQUEST = 'ADD_SERVER_REQUEST';
 export const ADD_SERVER_SUCCESS = 'ADD_SERVER_SUCCESS';
 export const ADD_SERVER_FAILURE = 'ADD_SERVER_FAILURE';
 
+export const UPDATE_SERVER_REQUEST = 'UPDATE_SERVER_REQUEST';
+export const UPDATE_SERVER_SUCCESS = 'UPDATE_SERVER_SUCCESS';
+export const UPDATE_SERVER_FAILURE = 'UPDATE_SERVER_FAILURE';
+
 
 export function loadServerList() {
   return async dispatch => {
@@ -37,6 +41,23 @@ export function addServer (server) {
       });
     } catch (error) {
       dispatch({ type: ADD_SERVER_FAILURE, error });
+    }
+  };
+}
+
+
+export function updateServer (id, server) {
+  return async dispatch => {
+    dispatch({ type: UPDATE_SERVER_REQUEST, id, server });
+    try {
+      const updated = await service.updateServer(id, server);
+      dispatch({
+        type: UPDATE_SERVER_SUCCESS,
+        id,
+        server: updated,
+      });
+    } catch (error) {
+      dispatch({ type: UPDATE_SERVER_FAILURE, id, error });
     }
   };
 }

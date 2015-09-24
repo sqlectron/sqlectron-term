@@ -32,6 +32,8 @@ class ServerList extends Component {
     if (loading) dispatch(setStatus('Loading list of servers...'));
     dispatch(setShortcuts([
       { key: 'A', label: 'Add new' },
+      { key: 'E', label: 'Edit' },
+      { key: 'R', label: 'Remove' },
       { key: 'Enter', label: 'Connect' },
     ]));
     dispatch(loadServerList());
@@ -75,6 +77,12 @@ class ServerList extends Component {
     }
     case 'a': {
       history.pushState(null, '/server/add');
+      break;
+    }
+    case 'e': {
+      if (!servers || !servers.length) return;
+      const serverId = this.refs.list.selected;
+      history.pushState(null, `/server/${serverId}/edit`);
       break;
     }
     default: return;
