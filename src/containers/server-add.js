@@ -35,7 +35,7 @@ class ServerAdd extends Component {
 
   async onSubmit (server) {
     await this.props.dispatch(addServer(server));
-    if (this.props.server) this.context.history.goBack();
+    if (!this.props.error) this.context.history.goBack();
   }
 
   render () {
