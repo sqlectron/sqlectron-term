@@ -21,6 +21,13 @@ export default function (state = { loading: true }, action) {
     servers[action.id] = action.server;
     return { ...state, servers };
   }
+  case types.REMOVE_SERVER: {
+    const servers = [
+      ...state.servers.slice(0, action.id),
+      ...state.servers.slice(action.id + 1),
+    ];
+    return { ...state, servers };
+  }
   default : return state;
   }
 }

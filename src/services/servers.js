@@ -56,6 +56,25 @@ export async function updateServer (id, server) {
 }
 
 
+export async function removeServer (id) {
+  const filename = path.join(homedir(), '.sqlectron.json');
+  const data = await readFile(filename);
+
+  data.servers = [
+    ...data.servers.slice(0, id),
+    ...data.servers.slice(id + 1),
+  ];
+
+  if (!serversValidate(data)) {
+    throw new Error('Invalid server definition');
+  }
+
+  await createFile(filename, data);
+
+  return obj;
+}
+
+
 function copyObject (obj) {
   const result = {};
   Object.keys(obj).forEach(k => {

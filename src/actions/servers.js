@@ -13,6 +13,8 @@ export const UPDATE_SERVER_REQUEST = 'UPDATE_SERVER_REQUEST';
 export const UPDATE_SERVER_SUCCESS = 'UPDATE_SERVER_SUCCESS';
 export const UPDATE_SERVER_FAILURE = 'UPDATE_SERVER_FAILURE';
 
+export const REMOVE_SERVER = 'REMOVE_SERVER';
+
 
 export function loadServerList() {
   return async dispatch => {
@@ -58,6 +60,17 @@ export function updateServer (id, server) {
       });
     } catch (error) {
       dispatch({ type: UPDATE_SERVER_FAILURE, id, error });
+    }
+  };
+}
+
+
+export function removeServer (id) {
+  return async dispatch => {
+    try {
+      await service.removeServer(id);
+    } finally {
+      dispatch({ type: REMOVE_SERVER, id });
     }
   };
 }

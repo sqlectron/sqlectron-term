@@ -85,6 +85,12 @@ class ServerList extends Component {
       history.pushState(null, `/server/${serverId}/edit`);
       break;
     }
+    case 'r': {
+      if (!servers || !servers.length) return;
+      const serverId = this.refs.list.selected;
+      history.pushState(null, `/server/${serverId}/remove`);
+      break;
+    }
     default: return;
     }
   }
