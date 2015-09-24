@@ -9,6 +9,9 @@ export default function (state = { loading: true }, action) {
     return { loading: false, servers: action.servers };
   case types.LOAD_SERVER_LIST_FAILURE:
     return { loading: false, error: action.error };
+  case types.ADD_SERVER_SUCCESS:
+    const servers = [ ...(state.servers || []), action.server ];
+    return { ...state, servers };
   default : return state;
   }
 }
