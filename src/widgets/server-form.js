@@ -66,7 +66,7 @@ export default class ServerForm extends Component {
 
     const keys = name.split('.');
 
-    if (name === 'port' || keys[1] === 'port') value = parseInt(value, 10);
+    if (name === 'port' || keys[1] === 'port') value = parseInt(value, 10) || '';
 
     if (keys.length === 2 && keys[0] === 'ssh') {
       this.setState({
@@ -260,7 +260,7 @@ export default class ServerForm extends Component {
                          ref="ssh.port"
                          name="ssh.port"
                          inputOnFocus="true"
-                         value={server.ssh && server.ssh.port && server.ssh.port.toString() || '22'}
+                         value={server.ssh && server.ssh.port && server.ssh.port.toString() || ''}
                          onFocus={this.onFocus.bind(this, 'ssh.port')}
                          onBlur={this.onBlur.bind(this, 'ssh.port')}
                 />
