@@ -21,10 +21,12 @@ export default
           component={require('./containers/server-edit')} />
         <Route path="server/:id/remove"
           component={require('./containers/server-remove')} />
-        <Route path="server/:id/database/:database"
-          component={require('./containers/database')}>
-          <Route path="query"
-            component={require('./containers/database-query')} />
+        <Route component={require('./containers/session')}>
+          <Route path="server/:id/database/:database"
+            component={require('./containers/database')}>
+            <Route path="query"
+              component={require('./containers/database-query')} />
+          </Route>
         </Route>
       </Route>
     </Router>

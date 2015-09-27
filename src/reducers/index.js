@@ -6,5 +6,7 @@ export default combineReducers({
   updateServer: require('./update-server'),
   status: require('./status'),
   servers: require('./servers'),
+  session: require('./session'),
   shortcuts: require('./shortcuts'),
+  tables: require('./tables'),
 });
