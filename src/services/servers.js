@@ -70,13 +70,13 @@ export async function removeServer (id) {
   }
 
   await createFile(filename, data);
-
-  return obj;
 }
 
 
 function copyObject (obj) {
   const result = {};
+
+  /* eslint-disable */
   Object.keys(obj).forEach(k => {
     const o = obj[k];
     let r = o;
@@ -86,6 +86,7 @@ function copyObject (obj) {
     }
     if (r) result[k] = r;
   });
+  /* eslint-enable */
 
   return result;
 }
