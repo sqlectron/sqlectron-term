@@ -25,8 +25,8 @@ export function loadServerList() {
         type: LOAD_SERVER_LIST_SUCCESS,
         servers: data.servers,
       });
-    } catch (e) {
-      dispatch({ type: LOAD_SERVER_LIST_FAILURE, error: e });
+    } catch (error) {
+      dispatch({ type: LOAD_SERVER_LIST_FAILURE, error });
     }
   };
 }
