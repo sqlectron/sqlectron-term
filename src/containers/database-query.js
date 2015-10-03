@@ -8,18 +8,6 @@ class DatabaseQuery extends Component {
     dispatch: PropTypes.func.isRequired,
   };
 
-  componentWillMount () {
-    const { dispatch } = this.props;
-    // if (loading) dispatch(setStatus('Loading list of servers...'));
-    // dispatch(setShortcuts([
-    //   { key: 'A', label: 'Add new' },
-    //   { key: 'E', label: 'Edit' },
-    //   { key: 'R', label: 'Remove' },
-    //   { key: 'Enter', label: 'Connect' },
-    // ]));
-    // dispatch(loadServerList());
-  }
-
   render () {
     return (
       <box left="center" top="center" shrink="true">
