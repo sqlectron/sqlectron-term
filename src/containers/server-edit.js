@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { updateServer } from '../actions/servers';
-import { setStatus, clearStatus } from '../actions/status';
+import { setStatus } from '../actions/status';
 
 import ServerForm from '../widgets/server-form';
 
@@ -27,10 +27,6 @@ class ServerEdit extends Component {
     const { dispatch } = this.props;
     if (update.error) return dispatch(setStatus(update.error));
     if (update.loading) return dispatch(setStatus('Adding server...'));
-  }
-
-  componentWillUnmount () {
-    this.props.dispatch(clearStatus());
   }
 
   async onSubmit (server) {

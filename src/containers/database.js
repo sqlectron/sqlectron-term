@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { loadTables } from '../actions/db';
-import { setStatus, clearStatus } from '../actions/status';
+import { setStatus } from '../actions/status';
 
 
 const style = {
@@ -29,10 +29,6 @@ class Database extends Component {
 
   componentWillReceiveProps (nextProps) {
     this.handleEvents(nextProps);
-  }
-
-  componentWillUnmount () {
-    this.props.dispatch(clearStatus());
   }
 
   handleEvents ({ loading, tables, error }) {

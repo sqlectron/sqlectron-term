@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { removeServer } from '../actions/servers';
-import { setStatus, clearStatus } from '../actions/status';
+import { setStatus } from '../actions/status';
 
 
 class ServerRemove extends Component {
@@ -22,10 +22,6 @@ class ServerRemove extends Component {
     this.props.dispatch(
       setStatus(`Server "${server.client} - ${server.name}" will be removed`)
     );
-  }
-
-  componentWillUnmount () {
-    this.props.dispatch(clearStatus());
   }
 
   onPress (choice) {
