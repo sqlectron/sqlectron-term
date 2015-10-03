@@ -17,10 +17,11 @@ const screen = blessed.screen({
 screen.key(['escape'], () => {
   try {
     history.goBack();
-  } catch (e) {
+  } catch (error) {
     process.exit(0);
   }
 });
+
 
 screen.key(['q', 'C-c'], () => {
   process.exit(0);
