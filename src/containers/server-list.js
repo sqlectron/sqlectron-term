@@ -1,19 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { loadServerList } from '../actions/servers';
-import { setStatus, clearStatus } from '../actions/status';
+import { setStatus } from '../actions/status';
 import { setShortcuts, clearShortcuts } from '../actions/shortcuts';
 
-
-const style = {
-  list: {
-    selected: { bg: 'blue', bold: true },
-  },
-  error: { fg: 'red' },
-};
+import ServerList from '../widgets/server-list';
 
 
-class ServerList extends Component {
+class ServerListContainer extends Component {
 
   static propTypes = {
     children: PropTypes.node,
@@ -28,19 +22,31 @@ class ServerList extends Component {
   };
 
   componentWillMount () {
-    const { dispatch, loading } = this.props;
-    if (loading) dispatch(setStatus('Loading list of servers...'));
-    dispatch(setShortcuts([
+    this.props.dispatch(loadServerList());
+  }
+
+  componentDidMount () {
+    this.handleProps(this.props);
+
+    this.props.dispatch(setShortcuts([
       { key: 'A', label: 'Add new' },
       { key: 'E', label: 'Edit' },
       { key: 'R', label: 'Remove' },
       { key: 'Enter', label: 'Connect' },
     ]));
-    dispatch(loadServerList());
   }
 
-  componentWillReceiveProps ({ error, loading, servers }) {
+  componentWillReceiveProps (nextProps) {
+    this.handleProps(nextProps);
+  }
+
+  componentWillUnmount () {
     const { dispatch } = this.props;
+    dispatch(clearShortcuts());
+  }
+
+  handleProps (props) {
+    const { dispatch, error, loading, servers } = props;
     if (error) dispatch(setStatus(error));
     if (loading) dispatch(setStatus('Loading list of servers...'));
     if (servers) {
@@ -52,51 +58,24 @@ class ServerList extends Component {
     }
   }
 
-  componentDidUpdate () {
-    if (this.refs.list) this.refs.list.focus();
+  handleAdd () {
+    this.context.history.pushState(null, '/server/add');
   }
 
-  componentWillUnmount () {
-    const { dispatch } = this.props;
-    dispatch(clearShortcuts());
-    dispatch(clearStatus());
+  handleEdit (server) {
+    this.context.history.pushState(null, `/server/${server.id}/edit`);
   }
 
-  onKeypress (ch, key) {
-    const { history } = this.context;
-    const { servers } = this.props;
-
-    switch (key.name) {
-    case 'enter': {
-      if (!servers || !servers.length) return;
-      const serverId = this.refs.list.selected;
-      const server = servers[serverId];
-      const route = `/server/${serverId}/database/${server.database}/query`;
-      history.pushState(null, route);
-      break;
-    }
-    case 'a': {
-      history.pushState(null, '/server/add');
-      break;
-    }
-    case 'e': {
-      if (!servers || !servers.length) return;
-      const serverId = this.refs.list.selected;
-      history.pushState(null, `/server/${serverId}/edit`);
-      break;
-    }
-    case 'r': {
-      if (!servers || !servers.length) return;
-      const serverId = this.refs.list.selected;
-      history.pushState(null, `/server/${serverId}/remove`);
-      break;
-    }
-    default: return;
-    }
+  handleRemove (server) {
+    this.context.history.pushState(null, `/server/${server.id}/remove`);
   }
 
-  onSelectItem () {
-    const server = this.props.servers[this.refs.list.selected];
+  handleConnect (server) {
+    const route = `/server/${server.id}/database/${server.database}/query`;
+    this.context.history.pushState(null, route);
+  }
+
+  handleSelected (server) {
     const host = server.host
       ? `${server.host}:${server.port}`
       : server.socketPath;
@@ -107,27 +86,17 @@ class ServerList extends Component {
 
   render () {
     const { loading, servers, error } = this.props;
+
     if (error || loading) return <element width={0} />;
 
-    const items = servers.map(c => c.name);
     return (
-      <list ref="list"
-            style={style.list}
-            left="center"
-            top="center"
-            border="line"
-            keys="true"
-            mouse="true"
-            shadow="true"
-            label=" Server list "
-            scrollbar={{
-              ch: ' ',
-              track: { bg: 'cyan' },
-              style: { inverse: true },
-            }}
-            items={items}
-            onKeypress={::this.onKeypress}
-            {...{ 'onSelect Item': ::this.onSelectItem } }
+      <ServerList
+        servers={servers}
+        onAdd={::this.handleAdd}
+        onEdit={::this.handleEdit}
+        onRemove={::this.handleRemove}
+        onConnect={::this.handleConnect}
+        onSelected={::this.handleSelected}
       />
     );
   }
@@ -137,4 +106,4 @@ class ServerList extends Component {
 
 export default connect(
   state => state.servers
-)(ServerList);
+)(ServerListContainer);
