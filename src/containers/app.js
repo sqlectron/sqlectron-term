@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import Shortcuts from '../widgets/shortcuts';
+import Status from '../widgets/status';
 
 
 const style = {
@@ -10,15 +11,8 @@ const style = {
     bg: '#0000d3',
     bold: true,
   },
-  shortcut: {
-    fg: '#00ffff',
-  },
   center: {
     bg: '#e7e7e7',
-  },
-  status: {
-    bg: '#00cfd0',
-    fg: '#000000',
   },
 };
 
@@ -44,7 +38,7 @@ class App extends Component {
         <box top={1} left={0} right={0} bottom={2} style={style.center}>
           {children}
         </box>
-        <text right={0} bottom={1} left={0} style={style.status} content={' ' + (status ? status : '')} />
+        <Status status={status} />
         <Shortcuts shortcuts={shortcuts} />
       </box>
     );
