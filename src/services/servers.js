@@ -44,6 +44,7 @@ export async function updateServer (id, server) {
 
   const obj = copyObject(server);
   if (!obj) return null;
+  delete obj.id;
 
   data.servers[id] = obj;
   if (!serversValidate(data)) {
