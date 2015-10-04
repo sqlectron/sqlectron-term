@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
+import Shortcuts from '../widgets/shortcuts';
+
 
 const style = {
   header: {
@@ -30,7 +32,12 @@ class App extends Component {
   };
 
   render () {
-    const { children, status, shortcuts } = this.props;
+    const { children, status } = this.props;
+    const shortcuts = [
+      { key: 'Q', label: 'Quit' },
+      { key: 'Escape', label: 'Back' },
+      ...this.props.shortcuts,
+    ];
     return (
       <box top={0} left={0} bottom={0} right={0} style={style.header}>
         <text tags="true" style={style.header} content=" SQLectron" />
@@ -38,16 +45,10 @@ class App extends Component {
           {children}
         </box>
         <text right={0} bottom={1} left={0} style={style.status} content={' ' + (status ? status : '')} />
-        <text tags="true" bottom={0} style={style.header}>
-          {
-            ` {${style.shortcut.fg}-fg}Q{/}-Quit ` +
-            shortcuts.map(shortcut => `{${style.shortcut.fg}-fg}${shortcut.key}{/}-${shortcut.label}`).join(' ')
-          }
-        </text>
+        <Shortcuts shortcuts={shortcuts} />
       </box>
     );
   }
-
 }
 
 
