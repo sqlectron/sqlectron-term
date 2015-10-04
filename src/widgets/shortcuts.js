@@ -16,7 +16,7 @@ const style = {
 export default function Shortcuts ({ shortcuts }) {
   return (
     <text tags="true" bottom={0} style={style.header}>
-      { shortcuts.map(shortcut => `{${style.shortcut.fg}-fg}${shortcut.key}{/}-${shortcut.label}`).join(' ') }
+      { shortcuts.map(shortcut => ` {${style.shortcut.fg}-fg}${shortcut.key}{/}-${shortcut.label}`).join('') }
     </text>
   );
 }
