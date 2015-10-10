@@ -3,13 +3,9 @@ import { connect } from 'react-redux';
 import { fetchTablesIfNeeded } from '../actions/db';
 import { setStatus } from '../actions/status';
 
-
-const style = {
-  list: {
-    selected: { bg: 'blue', bold: true },
-  },
-  error: { fg: 'red' },
-};
+import TableList from '../widgets/table-list';
+import QueryArea from '../widgets/query-area';
+import QueryResults from '../widgets/query-results';
 
 
 class Database extends Component {
@@ -27,6 +23,10 @@ class Database extends Component {
     this.handleEvents(this.props);
   }
 
+  componentDidMount () {
+    this.refs.queryArea.focus();
+  }
+
   componentWillReceiveProps (nextProps) {
     this.handleEvents(nextProps);
   }
@@ -40,25 +40,18 @@ class Database extends Component {
   }
 
   render () {
-    const { items } = this.props;
+    const { items = [] } = this.props;
     return (
-      <box border="line">
-        <list left={-1}
-              style={style.list}
-              top={-1}
-              bottom={-1}
-              width={30}
-              keys="true"
-              mouse="true"
-              border="line"
-              label="Tables"
-              scrollbar={{
-                ch: 'x',
-                track: { bg: 'cyan' },
-                style: { inverse: true },
-              }}
-              items={items}
-        />
+      <box top={1} left={1} bottom={2} right={3} shadow="true">
+        <box left={0} top={0} bottom={0} width={30}>
+          <TableList items={items} />
+        </box>
+        <box left={30} top={0} right={0} height={5}>
+          <QueryArea ref="queryArea" />
+        </box>
+        <box left={30} top={5} bottom={0} right={0}>
+          <QueryResults />
+        </box>
       </box>
     );
   }
