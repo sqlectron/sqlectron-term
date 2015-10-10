@@ -15,7 +15,6 @@ const style = {
 class Database extends Component {
 
   static propTypes = {
-    children: PropTypes.node,
     dispatch: PropTypes.func.isRequired,
 
     isFetching: PropTypes.bool.isRequired,
@@ -41,7 +40,7 @@ class Database extends Component {
   }
 
   render () {
-    const { children, items } = this.props;
+    const { items } = this.props;
     return (
       <box border="line">
         <list left={-1}
@@ -60,8 +59,6 @@ class Database extends Component {
               }}
               items={items}
         />
-        database info
-        {children}
       </box>
     );
   }

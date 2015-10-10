@@ -71,7 +71,7 @@ class ServerListContainer extends Component {
   }
 
   handleConnect (server) {
-    const route = `/server/${server.id}/database/${server.database}/query`;
+    const route = `/server/${server.id}/database/${server.database}`;
     this.context.history.pushState(null, route);
   }
 
