@@ -7,18 +7,22 @@ export default function (state = { loading: true }, action) {
     return { loading: true };
   }
   case types.LOAD_SERVER_LIST_SUCCESS: {
-    return { loading: false, servers: action.servers };
+    const servers = action.servers.map(
+      (server, idx) => ({ ...server, id: idx })
+    );
+    return { loading: false, servers };
   }
   case types.LOAD_SERVER_LIST_FAILURE: {
     return { loading: false, error: action.error };
   }
   case types.ADD_SERVER_SUCCESS: {
-    const servers = [ ...(state.servers || []), action.server ];
+    const servers = [ ...(state.servers || []) ];
+    servers.push({ ...action.server, id: servers.length });
     return { ...state, servers };
   }
   case types.UPDATE_SERVER_SUCCESS: {
     const servers = [ ...state.servers || [] ];
-    servers[action.id] = action.server;
+    servers[action.id] = { ...action.server, id: action.id };
     return { ...state, servers };
   }
   case types.REMOVE_SERVER: {
@@ -26,6 +30,7 @@ export default function (state = { loading: true }, action) {
       ...state.servers.slice(0, action.id),
       ...state.servers.slice(action.id + 1),
     ];
+    servers.forEach((server, idx) => server.id = idx);
     return { ...state, servers };
   }
   default : return state;

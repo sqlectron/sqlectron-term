@@ -1,44 +1,55 @@
 import * as service from '../services/db';
 
-export const CONNECT_TUNNEL_REQUEST = 'CONNECT_TUNNEL_REQUEST';
-export const CONNECT_TUNNEL_SUCCESS = 'CONNECT_TUNNEL_SUCCESS';
-export const CONNECT_TUNNEL_FAILURE = 'CONNECT_TUNNEL_FAILURE';
+export const DB_CONNECT_REQUEST = 'DB_CONNECT_REQUEST';
+export const DB_CONNECT_SUCCESS = 'DB_CONNECT_SUCCESS';
+export const DB_CONNECT_FAILURE = 'DB_CONNECT_FAILURE';
 
-export const CONNECT_SERVER_REQUEST = 'CONNECT_SERVER_REQUEST';
-export const CONNECT_SERVER_SUCCESS = 'CONNECT_SERVER_SUCCESS';
-export const CONNECT_SERVER_FAILURE = 'CONNECT_SERVER_FAILURE';
-
-export const LOAD_DB_TABLES_REQUEST = 'LOAD_DB_TABLES_REQUEST';
-export const LOAD_DB_TABLES_SUCCESS = 'LOAD_DB_TABLES_SUCCESS';
-export const LOAD_DB_TABLES_FAILURE = 'LOAD_DB_TABLES_FAILURE';
+export const DB_FETCH_TABLES_REQUEST = 'DB_FETCH_TABLES_REQUEST';
+export const DB_FETCH_TABLES_SUCCESS = 'DB_FETCH_TABLES_SUCCESS';
+export const DB_FETCH_TABLES_FAILURE = 'DB_FETCH_TABLES_FAILURE';
 
 
-export function loadTables (serverId, databaseName) {
+export function connect (serverId, database) {
   return async (dispatch, getState) => {
     const { servers } = getState();
     const server = servers.servers[parseInt(serverId, 10)];
 
-    const handlers = handleEvents(dispatch, {
-      onListTablesRequest: () =>
-        dispatch({ type: LOAD_DB_TABLES_REQUEST, serverId, databaseName }),
-    });
-
+    dispatch({ type: DB_CONNECT_REQUEST, server, database });
     try {
-      const tables = await service.listTables(server, databaseName, handlers);
-      dispatch({ type: LOAD_DB_TABLES_SUCCESS, serverId, databaseName, tables });
+      await service.connect(server, database);
+      dispatch({ type: DB_CONNECT_SUCCESS, server, database });
     } catch (error) {
-      dispatch({ type: LOAD_DB_TABLES_FAILURE, serverId, databaseName, error });
+      dispatch({ type: DB_CONNECT_FAILURE, server, database, error });
     }
   };
 }
 
 
-const handleEvents = (dispatch, handlers) => ({
-  onTunnelConnecting: () => dispatch({ type: CONNECT_TUNNEL_REQUEST }),
-  onTunnelConnected: () => dispatch({ type: CONNECT_TUNNEL_SUCCESS }),
-  onTunnelError: error => dispatch({ type: CONNECT_TUNNEL_FAILURE, error }),
-  onServerConnecting: () => dispatch({ type: CONNECT_SERVER_REQUEST }),
-  onServerConnected: () => dispatch({ type: CONNECT_SERVER_SUCCESS }),
-  onServerError: error => dispatch({ type: CONNECT_SERVER_FAILURE, error }),
-  ...handlers,
-});
+export function fetchTablesIfNeeded () {
+  return (dispatch, getState) => {
+    if (shouldFetchTables(getState())) {
+      return dispatch(fetchTables());
+    }
+  };
+}
+
+
+function shouldFetchTables (state) {
+  const tables = state.tables;
+  if (!tables) return true;
+  if (tables.isFetching) return false;
+  return tables.didInvalidate;
+}
+
+
+function fetchTables () {
+  return async dispatch => {
+    dispatch({ type: DB_FETCH_TABLES_REQUEST });
+    try {
+      const tables = await service.listTables();
+      dispatch({ type: DB_FETCH_TABLES_SUCCESS, tables });
+    } catch (error) {
+      dispatch({ type: DB_FETCH_TABLES_FAILURE, error });
+    }
+  };
+}

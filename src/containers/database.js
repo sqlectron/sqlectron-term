@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { loadTables } from '../actions/db';
+import { fetchTablesIfNeeded } from '../actions/db';
 import { setStatus } from '../actions/status';
 
 
@@ -17,13 +17,14 @@ class Database extends Component {
   static propTypes = {
     children: PropTypes.node,
     dispatch: PropTypes.func.isRequired,
-    params: PropTypes.object.isRequired,
-    tables: PropTypes.array,
+
+    isFetching: PropTypes.bool.isRequired,
+    items: PropTypes.array.isRequired,
+    error: PropTypes.any,
   };
 
   componentWillMount () {
-    const { dispatch, params } = this.props;
-    dispatch(loadTables(params.id, params.database));
+    this.props.dispatch(fetchTablesIfNeeded());
     this.handleEvents(this.props);
   }
 
@@ -31,16 +32,16 @@ class Database extends Component {
     this.handleEvents(nextProps);
   }
 
-  handleEvents ({ loading, tables, error }) {
+  handleEvents ({ isFetching, error }) {
     const { dispatch } = this.props;
 
-    if (error) dispatch(setStatus(error));
-    if (loading) dispatch(setStatus('Loading list of tables...'));
-    if (tables) dispatch(setStatus('List of tables loaded'));
+    if (error) return dispatch(setStatus(error));
+    if (isFetching) return dispatch(setStatus('Loading list of tables...'));
+    dispatch(setStatus('List of tables loaded'));
   }
 
   render () {
-    const { children, tables = [] } = this.props;
+    const { children, items } = this.props;
     return (
       <box border="line">
         <list left={-1}
@@ -57,7 +58,7 @@ class Database extends Component {
                 track: { bg: 'cyan' },
                 style: { inverse: true },
               }}
-              items={tables}
+              items={items}
         />
         database info
         {children}
@@ -68,6 +69,8 @@ class Database extends Component {
 }
 
 
-export default connect(
-  state => state.tables
-)(Database);
+function mapStateToProps (state) {
+  return state.tables;
+}
+
+export default connect(mapStateToProps)(Database);
