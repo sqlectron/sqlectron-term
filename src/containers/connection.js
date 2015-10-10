@@ -8,7 +8,7 @@ import { connect as connectDatabase } from '../actions/db';
 class Connection extends Component {
 
   static propTypes = {
-    children: PropTypes.node,
+    children: PropTypes.element.isRequired,
     dispatch: PropTypes.func.isRequired,
     params: PropTypes.object.isRequired,
     connected: PropTypes.bool,
@@ -40,13 +40,8 @@ class Connection extends Component {
 
     if (!connected || !isSameServer) return <element width={0} />;
 
-    return (
-      <box top={1} left={1} right={1} bottom={1}>
-        { children }
-      </box>
-    );
+    return children;
   }
-
 }
 
 
