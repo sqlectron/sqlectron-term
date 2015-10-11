@@ -45,30 +45,29 @@ class Database extends Component {
   }
 
   render () {
-    const { items = [] } = this.props;
+    const { items } = this.props;
+
+    const tableListShortcuts = [ { key: 'Enter', label: 'Select' } ];
+    const queryAreaShortcuts = [
+      { key: 'C-c', label: 'Clear' },
+      { key: 'C-x', label: 'Execute' },
+    ];
+    const queryResultsShortcuts = [ { key: 'F', label: 'Fullscreen' } ];
+
     return (
       <box top={1} left={1} bottom={2} right={3} shadow="true">
         <box left={0} top={0} bottom={0} width={30}>
-          <Shortcuts items={[ { key: 'Enter', label: 'Select' } ]}>
-            <TableList
-              ref="tableList"
-              items={items}
-            />
+          <Shortcuts items={tableListShortcuts}>
+            <TableList ref="tableList" items={items} />
           </Shortcuts>
         </box>
         <box left={30} top={0} right={0} height={5}>
-          <Shortcuts items={[
-            { key: 'C-c', label: 'Clear' },
-            { key: 'C-x', label: 'Execute' },
-          ]}>
-            <QueryArea
-              ref="queryArea"
-              onExecute={::this.handleExecuteQuery}
-            />
+          <Shortcuts items={queryAreaShortcuts}>
+            <QueryArea ref="queryArea" onExecute={::this.handleExecuteQuery} />
           </Shortcuts>
         </box>
         <box left={30} top={5} bottom={0} right={0}>
-          <Shortcuts items={[ { key: 'F', label: 'Fullscreen' } ]}>
+          <Shortcuts items={queryResultsShortcuts}>
             <QueryResults ref="queryResults" />
           </Shortcuts>
         </box>
