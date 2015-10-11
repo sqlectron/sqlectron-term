@@ -24,7 +24,7 @@ class Database extends Component {
   }
 
   componentDidMount () {
-    this.refs.queryArea.focus();
+    this.refs.tableList.focus();
   }
 
   componentWillReceiveProps (nextProps) {
@@ -46,6 +46,11 @@ class Database extends Component {
     this.props.dispatch(executeQueryIfNeeded(query));
   }
 
+  handleExecuteTable (table) {
+    const query = `select * from "${table}" limit 1000`;
+    this.props.dispatch(executeQueryIfNeeded(query));
+  }
+
   render () {
     const { tables, query } = this.props;
 
@@ -61,7 +66,11 @@ class Database extends Component {
       <box top={1} left={1} bottom={2} right={3} shadow="true">
         <box left={0} top={0} bottom={0} width={30}>
           <Shortcuts items={tableListShortcuts}>
-            <TableList ref="tableList" items={tables.items} />
+            <TableList
+              ref="tableList"
+              items={tables.items}
+              onExecute={::this.handleExecuteTable}
+            />
           </Shortcuts>
         </box>
         <box left={30} top={0} right={0} height={5}>
