@@ -28,7 +28,7 @@ screen.key(['tab'], () => {
 });
 
 
-screen.key(['q', 'C-c'], () => {
+screen.key(['q'], () => {
   process.exit(0);
 });
 
