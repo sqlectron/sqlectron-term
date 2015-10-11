@@ -25,7 +25,16 @@ export default class QueryResults extends Component {
     this.state = { focused: false };
   }
 
+  componentDidMount () {
+    this.refs.textarea.setScrollPerc(0);
+  }
+
+  componentDidUpdate () {
+    this.refs.textarea.setScrollPerc(0);
+  }
+
   handleFocus () {
+    this.refs.textarea.readInput();
     this.setState({ focused: true });
     if (this.props.onFocus) this.props.onFocus(this);
   }
@@ -33,6 +42,18 @@ export default class QueryResults extends Component {
   handleBlur () {
     this.setState({ focused: false });
     if (this.props.onBlur) this.props.onBlur(this);
+  }
+
+  handleKeypress (ch, info) {
+    switch (info.full) {
+    case 'tab':
+      this.refs.textarea.screen.focusNext();
+      break;
+    case 'S-tab':
+      this.refs.textarea.screen.focusPrev();
+      break;
+    default: return false;
+    }
   }
 
   render () {
@@ -88,6 +109,7 @@ export default class QueryResults extends Component {
         style={this.state.focused ? style.focus : style.blur }
       >
         <textarea
+          ref="textarea"
           mouse="true"
           keys="true"
           scrollbar={{
@@ -96,9 +118,9 @@ export default class QueryResults extends Component {
             style: { inverse: true },
           }}
           scrollable="true"
-          alwaysScroll="true"
           onFocus={::this.handleFocus}
           onBlur={::this.handleBlur}
+          onKeypress={::this.handleKeypress}
           value={content}
         />
       </box>
