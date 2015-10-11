@@ -8,7 +8,7 @@ export default function (state = {
 }, action) {
   switch (action.type) {
   case types.DB_CONNECT_SUCCESS: {
-    return { ...state, didInvalidate: true };
+    return { ...state, items: [], didInvalidate: true };
   }
   case types.DB_FETCH_TABLES_REQUEST: {
     return { ...state, isFetching: true, didInvalidate: false, error: null };
