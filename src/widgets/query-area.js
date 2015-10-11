@@ -14,8 +14,11 @@ const style = {
 export default class QueryArea extends Component {
 
   static propTypes = {
+    query: PropTypes.string,
+    // events
     onFocus: PropTypes.func,
     onBlur: PropTypes.func,
+    // actions
     onExecute: PropTypes.func,
   };
 
@@ -77,6 +80,7 @@ export default class QueryArea extends Component {
           onFocus={::this.handleFocus}
           onBlur={::this.handleBlur}
           onKeypress={::this.handleKeypress}
+          value={this.props.query || ''}
         />
         <text top={0} left={2} content="Query" />
       </box>
