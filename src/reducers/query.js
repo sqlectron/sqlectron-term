@@ -7,23 +7,25 @@ export default function (state = reset(), action) {
     return reset();
   }
   case types.DB_EXECUTE_QUERY_REQUEST: {
-    return { ...state, isExecuting: true, didInvalidate: false, error: null };
+    return {
+      ...reset(),
+      isExecuting: true,
+      didInvalidate: false,
+      query: action.query,
+    };
   }
   case types.DB_EXECUTE_QUERY_SUCCESS: {
     return {
-      ...state,
-      isExecuting: false,
+      ...reset(),
       didInvalidate: false,
       query: action.query,
       result: action.result,
-      error: null,
     };
   }
   case types.DB_EXECUTE_QUERY_FAILURE: {
     return {
-      ...state,
-      isExecuting: false,
-      didInvalidate: true,
+      ...reset(),
+      query: action.query,
       error: action.error,
     };
   }

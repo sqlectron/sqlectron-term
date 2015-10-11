@@ -78,12 +78,12 @@ function shouldExecuteQuery (query, state) {
 
 function executeQuery (query) {
   return async dispatch => {
-    dispatch({ type: DB_EXECUTE_QUERY_REQUEST });
+    dispatch({ type: DB_EXECUTE_QUERY_REQUEST, query });
     try {
       const result = await service.executeQuery(query);
       dispatch({ type: DB_EXECUTE_QUERY_SUCCESS, query, result });
     } catch (error) {
-      dispatch({ type: DB_EXECUTE_QUERY_FAILURE, error });
+      dispatch({ type: DB_EXECUTE_QUERY_FAILURE, query, error });
     }
   };
 }
