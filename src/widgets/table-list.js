@@ -18,6 +18,8 @@ export default class TableList extends Component {
 
   static propTypes = {
     items: PropTypes.array.isRequired,
+    onFocus: PropTypes.func,
+    onBlur: PropTypes.func,
   };
 
   constructor (props) {
@@ -28,10 +30,12 @@ export default class TableList extends Component {
 
   handleFocus () {
     this.setState({ focused: true });
+    if (this.props.onFocus) this.props.onFocus(this);
   }
 
   handleBlur () {
     this.setState({ focused: false });
+    if (this.props.onBlur) this.props.onBlur(this);
   }
 
   render () {

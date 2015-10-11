@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { fetchTablesIfNeeded } from '../actions/db';
 import { setStatus } from '../actions/status';
 
+import Shortcuts from './shortcuts';
 import TableList from '../widgets/table-list';
 import QueryArea from '../widgets/query-area';
 import QueryResults from '../widgets/query-results';
@@ -39,18 +40,37 @@ class Database extends Component {
     dispatch(setStatus('List of tables loaded'));
   }
 
+  handleExecuteQuery (query) {
+    console.error('execute query', query);
+  }
+
   render () {
     const { items = [] } = this.props;
     return (
       <box top={1} left={1} bottom={2} right={3} shadow="true">
         <box left={0} top={0} bottom={0} width={30}>
-          <TableList items={items} />
+          <Shortcuts items={[ { key: 'Enter', label: 'Select' } ]}>
+            <TableList
+              ref="tableList"
+              items={items}
+            />
+          </Shortcuts>
         </box>
         <box left={30} top={0} right={0} height={5}>
-          <QueryArea ref="queryArea" />
+          <Shortcuts items={[
+            { key: 'C-c', label: 'Clear' },
+            { key: 'C-x', label: 'Execute' },
+          ]}>
+            <QueryArea
+              ref="queryArea"
+              onExecute={::this.handleExecuteQuery}
+            />
+          </Shortcuts>
         </box>
         <box left={30} top={5} bottom={0} right={0}>
-          <QueryResults />
+          <Shortcuts items={[ { key: 'F', label: 'Fullscreen' } ]}>
+            <QueryResults ref="queryResults" />
+          </Shortcuts>
         </box>
       </box>
     );

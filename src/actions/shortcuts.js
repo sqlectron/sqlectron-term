@@ -1,12 +1,12 @@
-export const SET_SHORTCUTS = 'SET_SHORTCUTS';
-export const CLEAR_SHORTCUTS = 'CLEAR_SHORTCUTS';
+export const ADD_SHORTCUTS = 'ADD_SHORTCUTS';
+export const REMOVE_SHORTCUTS = 'REMOVE_SHORTCUTS';
 
 
-export function setShortcuts (shortcuts) {
-  return { type: SET_SHORTCUTS, shortcuts };
+export function addShortcuts (shortcuts) {
+  return { type: ADD_SHORTCUTS, shortcuts };
 }
 
 
-export function clearShortcuts () {
-  return { type: CLEAR_SHORTCUTS };
+export function removeShortcuts (shortcuts) {
+  return { type: REMOVE_SHORTCUTS, shortcuts };
 }

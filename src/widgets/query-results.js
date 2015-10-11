@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 
 
 const style = {
@@ -13,6 +13,11 @@ const style = {
 
 export default class QueryResults extends Component {
 
+  static propTypes = {
+    onFocus: PropTypes.func,
+    onBlur: PropTypes.func,
+  };
+
   constructor (props) {
     super(props);
 
@@ -21,10 +26,12 @@ export default class QueryResults extends Component {
 
   handleFocus () {
     this.setState({ focused: true });
+    if (this.props.onFocus) this.props.onFocus(this);
   }
 
   handleBlur () {
     this.setState({ focused: false });
+    if (this.props.onBlur) this.props.onBlur(this);
   }
 
   render () {

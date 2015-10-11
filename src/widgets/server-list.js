@@ -13,6 +13,9 @@ export default class ServerList extends Component {
 
   static propTypes = {
     servers: PropTypes.array.isRequired,
+    // events
+    onFocus: PropTypes.func,
+    onBlur: PropTypes.func,
     // actions
     onAdd: PropTypes.func,
     onEdit: PropTypes.func,
@@ -66,6 +69,14 @@ export default class ServerList extends Component {
     }
   }
 
+  handleFocus () {
+    if (this.props.onFocus) this.props.onFocus(this);
+  }
+
+  handleBlur () {
+    if (this.props.onBlur) this.props.onBlur(this);
+  }
+
   render () {
     const { servers } = this.props;
 
@@ -87,6 +98,8 @@ export default class ServerList extends Component {
               style: { inverse: true },
             }}
             items={items}
+            onFocus={::this.handleFocus}
+            onBlur={::this.handleBlur}
             onKeypress={::this.handleKeypress}
             {...{ 'onSelect Item': ::this.handleSelectItem } }
       />

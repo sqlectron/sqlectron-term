@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 
 
 const style = {
@@ -12,6 +12,12 @@ const style = {
 
 
 export default class QueryArea extends Component {
+
+  static propTypes = {
+    onFocus: PropTypes.func,
+    onBlur: PropTypes.func,
+    onExecute: PropTypes.func,
+  };
 
   constructor (props) {
     super(props);
@@ -30,14 +36,30 @@ export default class QueryArea extends Component {
   handleFocus () {
     this.refs.textarea.readInput();
     this.setState({ focused: true });
+    if (this.props.onFocus) this.props.onFocus(this);
   }
 
   handleBlur () {
     this.setState({ focused: false });
+    if (this.props.onBlur) this.props.onBlur(this);
   }
 
   handleKeypress (ch, info) {
-    if (info.name === 'tab') this.refs.textarea.screen.focusNext();
+    switch (info.full) {
+    case 'C-c':
+      this.refs.textarea.setValue('');
+      this.forceUpdate();
+      break;
+    case 'C-x':
+      if (this.props.onExecute) {
+        this.props.onExecute(this.refs.textarea.getValue());
+      }
+      break;
+    case 'tab':
+      this.refs.textarea.screen.focusNext();
+      break;
+    default: return false;
+    }
   }
 
   render () {

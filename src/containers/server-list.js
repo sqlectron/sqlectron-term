@@ -2,8 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { loadServerList } from '../actions/servers';
 import { setStatus } from '../actions/status';
-import { setShortcuts, clearShortcuts } from '../actions/shortcuts';
 
+import Shortcuts from './shortcuts';
 import ServerList from '../widgets/server-list';
 
 
@@ -27,22 +27,10 @@ class ServerListContainer extends Component {
 
   componentDidMount () {
     this.handleProps(this.props);
-
-    this.props.dispatch(setShortcuts([
-      { key: 'A', label: 'Add new' },
-      { key: 'E', label: 'Edit' },
-      { key: 'R', label: 'Remove' },
-      { key: 'Enter', label: 'Connect' },
-    ]));
   }
 
   componentWillReceiveProps (nextProps) {
     this.handleProps(nextProps);
-  }
-
-  componentWillUnmount () {
-    const { dispatch } = this.props;
-    dispatch(clearShortcuts());
   }
 
   handleProps (props) {
@@ -90,14 +78,21 @@ class ServerListContainer extends Component {
     if (error || loading) return <element width={0} />;
 
     return (
-      <ServerList
-        servers={servers}
-        onAdd={::this.handleAdd}
-        onEdit={::this.handleEdit}
-        onRemove={::this.handleRemove}
-        onConnect={::this.handleConnect}
-        onSelected={::this.handleSelected}
-      />
+      <Shortcuts items={[
+        { key: 'A', label: 'Add new' },
+        { key: 'E', label: 'Edit' },
+        { key: 'R', label: 'Remove' },
+        { key: 'Enter', label: 'Connect' },
+      ]}>
+        <ServerList
+          servers={servers}
+          onAdd={::this.handleAdd}
+          onEdit={::this.handleEdit}
+          onRemove={::this.handleRemove}
+          onConnect={::this.handleConnect}
+          onSelected={::this.handleSelected}
+        />
+      </Shortcuts>
     );
   }
 

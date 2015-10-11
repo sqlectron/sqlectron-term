@@ -6,11 +6,14 @@ export default function (
   action
 ) {
   switch (action.type) {
-  case types.SET_SHORTCUTS: {
-    return [].concat(action.shortcuts);
-  }
-  case types.CLEAR_SHORTCUTS:
-    return [];
+  case types.ADD_SHORTCUTS:
+    return [ ...state, ...action.shortcuts ];
+  case types.REMOVE_SHORTCUTS:
+    return state.filter(
+      shortcut => !action.shortcuts.find(
+        actionShortcut => shortcut.key === actionShortcut.key
+      )
+    );
   default : return state;
   }
 }
