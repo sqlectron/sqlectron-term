@@ -26,6 +26,9 @@ screen.key(['escape'], () => {
 screen.key(['tab'], () => {
   screen.focusNext();
 });
+screen.key(['S-tab'], () => {
+  screen.focusPrev();
+});
 
 
 screen.key(['q'], () => {

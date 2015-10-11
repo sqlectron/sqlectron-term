@@ -58,6 +58,9 @@ export default class QueryArea extends Component {
     case 'tab':
       this.refs.textarea.screen.focusNext();
       break;
+    case 'S-tab':
+      this.refs.textarea.screen.focusPrev();
+      break;
     default: return false;
     }
   }
