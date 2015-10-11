@@ -46,6 +46,7 @@ export default function (serverInfo, databaseName) {
       resolve({
         disconnect: () => disconnect(client),
         listTables: () => listTables(client),
+        executeQuery: (query) => executeQuery(client, query),
       });
     });
   });
@@ -66,6 +67,22 @@ export function listTables (client) {
     client.query(sql, params, (err, data) => {
       if (err) return reject(err);
       resolve(data.rows.map(row => row.table_name));
+    });
+  });
+}
+
+
+export function executeQuery (client, query) {
+  return new Promise((resolve, reject) => {
+    client.query(query, (err, data) => {
+      console.error(err, data);
+      if (err) return reject(err);
+      resolve({
+        command: data.command,
+        rowCount: data.rowCount,
+        rows: data.rows,
+        fields: data.fields,
+      });
     });
   });
 }

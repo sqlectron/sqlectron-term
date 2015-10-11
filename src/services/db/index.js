@@ -25,3 +25,9 @@ export async function listTables () {
   if (connecting || !connection) throw new Error('connecting to server');
   return await connection.listTables();
 }
+
+
+export async function executeQuery (query) {
+  if (connecting || !connection) throw new Error('connecting to server');
+  return await connection.executeQuery(query);
+}
