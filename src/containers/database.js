@@ -60,7 +60,7 @@ class Database extends Component {
       { key: 'C-e', label: 'Editor' },
       { key: 'C-x', label: 'Execute' },
     ];
-    const queryResultsShortcuts = [ { key: 'E', label: 'Editor' } ];
+    const queryResultsShortcuts = [ { key: 'C-e', label: 'Editor' } ];
 
     return (
       <box top={1} left={1} bottom={2} right={3} shadow="true">
