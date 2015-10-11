@@ -12,7 +12,7 @@ export default function (
       : action.status.toString();
   }
   case types.CLEAR_STATUS:
-    return null;
+    return '';
   default : return state;
   }
 }
