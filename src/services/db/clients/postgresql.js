@@ -75,7 +75,6 @@ export function listTables (client) {
 export function executeQuery (client, query) {
   return new Promise((resolve, reject) => {
     client.query(query, (err, data) => {
-      console.error(err, data);
       if (err) return reject(err);
       resolve({
         command: data.command,
