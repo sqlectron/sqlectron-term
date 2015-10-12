@@ -25,11 +25,7 @@ export default class QueryArea extends Component {
   constructor (props) {
     super(props);
 
-    this.state = { focused: false };
-  }
-
-  setValue (value) {
-    this.refs.textarea.setValue(value);
+    this.state = { query: props.query || '', focused: false };
   }
 
   focus () {
@@ -50,8 +46,7 @@ export default class QueryArea extends Component {
   handleKeypress (ch, info) {
     switch (info.full) {
     case 'C-c':
-      this.refs.textarea.setValue('');
-      this.forceUpdate();
+      this.setState({ query: '' });
       break;
     case 'C-x':
       if (this.props.onExecute) {
@@ -68,6 +63,12 @@ export default class QueryArea extends Component {
     }
   }
 
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.query !== this.state.query) {
+      this.setState({ query: nextProps.query });
+    }
+  }
+
   render () {
     return (
       <box>
@@ -80,7 +81,7 @@ export default class QueryArea extends Component {
           onFocus={::this.handleFocus}
           onBlur={::this.handleBlur}
           onKeypress={::this.handleKeypress}
-          value={this.props.query || ''}
+          value={this.state.query}
         />
         <text top={0} left={2} content="Query" />
       </box>
