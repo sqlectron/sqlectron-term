@@ -28,6 +28,12 @@ export default class QueryArea extends Component {
     this.state = { query: props.query || '', focused: false };
   }
 
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.query !== this.state.query) {
+      this.setState({ query: nextProps.query });
+    }
+  }
+
   focus () {
     this.refs.textarea.focus();
   }
@@ -60,12 +66,6 @@ export default class QueryArea extends Component {
       this.refs.textarea.screen.focusPrev();
       break;
     default: return false;
-    }
-  }
-
-  componentWillReceiveProps (nextProps) {
-    if (nextProps.query !== this.state.query) {
-      this.setState({ query: nextProps.query });
     }
   }
 
