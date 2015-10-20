@@ -5,7 +5,7 @@ import { setStatus, clearStatus } from '../actions/status';
 
 import Shortcuts from './shortcuts';
 import TableList from '../widgets/table-list';
-import QueryArea from '../widgets/query-area';
+import Textarea from '../widgets/textarea';
 import QueryResults from '../widgets/query-results';
 
 
@@ -75,8 +75,9 @@ class Database extends Component {
         </box>
         <box left={30} top={0} right={0} height={5}>
           <Shortcuts items={queryAreaShortcuts}>
-            <QueryArea ref="queryArea" query={query.query} onExecute={::this.handleExecuteQuery} />
+            <Textarea ref="queryArea" defaultValue={query.query} />
           </Shortcuts>
+          <text top={0} left={2} content="Query" />
         </box>
         <box left={30} top={5} bottom={0} right={0}>
           <Shortcuts items={queryResultsShortcuts}>

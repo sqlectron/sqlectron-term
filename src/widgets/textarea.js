@@ -11,27 +11,34 @@ const style = {
 };
 
 
-export default class QueryArea extends Component {
+export default class Textarea extends Component {
 
   static propTypes = {
-    query: PropTypes.string,
+    defaultValue: PropTypes.string,
     // events
     onFocus: PropTypes.func,
     onBlur: PropTypes.func,
-    // actions
-    onExecute: PropTypes.func,
+    onKeypress: PropTypes.func,
   };
 
   constructor (props) {
     super(props);
 
-    this.state = { query: props.query || '', focused: false };
+    this.state = { value: props.defaultValue || '', focused: false };
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.query !== this.state.query) {
-      this.setState({ query: nextProps.query });
+    if (nextProps.defaultValue !== this.state.value) {
+      this.setState({ value: nextProps.defaultValue });
     }
+  }
+
+  setValue (value) {
+    this.setState({ value });
+  }
+
+  getValue () {
+    return this.state.value;
   }
 
   focus () {
@@ -50,15 +57,12 @@ export default class QueryArea extends Component {
   }
 
   handleKeypress (ch, info) {
+    const value = this.refs.textarea.value;
+    if (value !== this.state.value) this.setState({ value });
+
+    if (this.props.onKeypress) this.props.onKeypress(ch, info);
+
     switch (info.full) {
-    case 'C-c':
-      this.setState({ query: '' });
-      break;
-    case 'C-x':
-      if (this.props.onExecute) {
-        this.props.onExecute(this.refs.textarea.getValue());
-      }
-      break;
     case 'tab':
       this.refs.textarea.screen.focusNext();
       break;
@@ -71,20 +75,17 @@ export default class QueryArea extends Component {
 
   render () {
     return (
-      <box>
-        <textarea
-          ref="textarea"
-          keys="true"
-          mouse="true"
-          border="line"
-          style={this.state.focused ? style.focus : style.blur }
-          onFocus={::this.handleFocus}
-          onBlur={::this.handleBlur}
-          onKeypress={::this.handleKeypress}
-          value={this.state.query}
-        />
-        <text top={0} left={2} content="Query" />
-      </box>
+      <textarea
+        ref="textarea"
+        keys="true"
+        mouse="true"
+        border="line"
+        style={this.state.focused ? style.focus : style.blur }
+        onFocus={::this.handleFocus}
+        onBlur={::this.handleBlur}
+        onKeypress={::this.handleKeypress}
+        value={this.state.value}
+      />
     );
   }
 
