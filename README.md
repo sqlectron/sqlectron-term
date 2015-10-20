@@ -32,10 +32,10 @@ npm run dev
 - [x] execute query
 - [x] show results
 - [x] set query and execute on table selection
+- [x] try to enhance shortcut control to work directly on screen
 - [ ] list databases
 - [ ] improve style handling
 - [ ] improve db connect action (work similar to fetchTablesIfNeeded)
 - [ ] improve servers handling (work similar to fetchTablesIfNeeded)
 - [ ] show selected table name in status bar
 - [ ] improve server add / edit screen (similar to database container)
-- [ ] try to enhance shortcut control to work directly on screen

@@ -42,23 +42,40 @@ class Database extends Component {
     dispatch(clearStatus());
   }
 
-  handleExecuteQuery (query) {
+  handleExecuteQuery () {
+    const query = this.refs.queryArea.getValue();
     this.props.dispatch(executeQueryIfNeeded(query));
   }
 
-  handleExecuteTable (table) {
-    const query = `select * from "${table}" limit 1000`;
+  handleSelectTable () {
+    const { tables } = this.props;
+    if (!tables.items.length) return;
+
+    const selected = this.refs.tableList.selected();
+    const item = tables.items[selected];
+    const query = `select * from "${item}" limit 1000`;
     this.props.dispatch(executeQueryIfNeeded(query));
+  }
+
+  handleChangeDatabase () {
+    console.error('handle change database');
+  }
+
+  handleClearQuery () {
+    this.refs.queryArea.setValue('');
   }
 
   render () {
     const { tables, query } = this.props;
 
-    const tableListShortcuts = [ { key: 'Enter', label: 'Select' } ];
+    const tableListShortcuts = [
+      { key: 'return', label: 'Select', handler: ::this.handleSelectTable },
+      { key: 'c', label: 'Change database', handler: ::this.handleChangeDatabase },
+    ];
     const queryAreaShortcuts = [
-      { key: 'C-c', label: 'Clear' },
+      { key: 'C-c', label: 'Clear', handler: ::this.handleClearQuery },
       { key: 'C-e', label: 'Editor' },
-      { key: 'C-x', label: 'Execute' },
+      { key: 'C-x', label: 'Execute', handler: ::this.handleExecuteQuery },
     ];
     const queryResultsShortcuts = [ { key: 'C-e', label: 'Editor' } ];
 
@@ -66,11 +83,7 @@ class Database extends Component {
       <box top={1} left={1} bottom={2} right={3} shadow="true">
         <box left={0} top={0} bottom={0} width={30}>
           <Shortcuts items={tableListShortcuts}>
-            <TableList
-              ref="tableList"
-              items={tables.items}
-              onExecute={::this.handleExecuteTable}
-            />
+            <TableList ref="tableList" items={tables.items} />
           </Shortcuts>
         </box>
         <box left={30} top={0} right={0} height={5}>
