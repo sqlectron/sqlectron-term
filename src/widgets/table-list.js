@@ -21,8 +21,7 @@ export default class TableList extends Component {
     // events
     onFocus: PropTypes.func,
     onBlur: PropTypes.func,
-    // actions
-    onExecute: PropTypes.func,
+    onKeypress: PropTypes.func,
   };
 
   constructor (props) {
@@ -31,32 +30,27 @@ export default class TableList extends Component {
     this.state = { focused: false };
   }
 
+  selected () {
+    if (this.refs.list) return this.refs.list.selected;
+    return 0;
+  }
+
   focus () {
     this.refs.list.focus();
   }
 
   handleFocus () {
     this.setState({ focused: true });
-    if (this.props.onFocus) this.props.onFocus(this);
+    if (this.props.onFocus) this.props.onFocus();
   }
 
   handleBlur () {
     this.setState({ focused: false });
-    if (this.props.onBlur) this.props.onBlur(this);
+    if (this.props.onBlur) this.props.onBlur();
   }
 
   handleKeypress (ch, key) {
-    const { onExecute, items } = this.props;
-
-    switch (key.full) {
-    case 'enter': {
-      if (onExecute && items && items.length) {
-        onExecute(items[this.refs.list.selected]);
-      }
-      break;
-    }
-    default: return;
-    }
+    if (this.props.onKeypress) this.props.onKeypress(ch, key);
   }
 
   render () {
