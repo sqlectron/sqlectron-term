@@ -31,3 +31,9 @@ export async function executeQuery (query) {
   if (connecting || !connection) throw new Error('connecting to server');
   return await connection.executeQuery(query);
 }
+
+
+export async function listDatabases () {
+  if (connecting || !connection) throw new Error('connecting to server');
+  return await connection.listDatabases();
+}

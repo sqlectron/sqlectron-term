@@ -47,6 +47,7 @@ export default function (serverInfo, databaseName) {
         disconnect: () => disconnect(client),
         listTables: () => listTables(client),
         executeQuery: (query) => executeQuery(client, query),
+        listDatabases: () => listDatabases(client),
       });
     });
   });
@@ -82,6 +83,18 @@ export function executeQuery (client, query) {
         rows: data.rows,
         fields: data.fields,
       });
+    });
+  });
+}
+
+
+export function listDatabases (client) {
+  return new Promise((resolve, reject) => {
+    const sql = `select datname from pg_database where datistemplate = $1 order by datname`;
+    const params = [ false ];
+    client.query(sql, params, (err, data) => {
+      if (err) return reject(err);
+      resolve(data.rows.map(row => row.datname));
     });
   });
 }
