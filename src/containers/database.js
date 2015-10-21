@@ -14,8 +14,14 @@ class Database extends Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
 
+    params: PropTypes.object.isRequired,
+
     tables: PropTypes.any,
     query: PropTypes.any,
+  };
+
+  static contextTypes = {
+    history: PropTypes.object.isRequired,
   };
 
   componentWillMount () {
@@ -58,7 +64,9 @@ class Database extends Component {
   }
 
   handleChangeDatabase () {
-    console.error('handle change database');
+    const { id, database } = this.props.params;
+    const route = `/server/${id}/database/${database}/databases`;
+    this.context.history.pushState(null, route);
   }
 
   handleClearQuery () {

@@ -24,6 +24,10 @@ class Connection extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
+    const { dispatch, params, isSameServer, connecting, error } = nextProps;
+    if (!connecting && (error || !isSameServer)) {
+      dispatch(connectDatabase(params.id, params.database));
+    }
     this.handleProps(nextProps);
   }
 

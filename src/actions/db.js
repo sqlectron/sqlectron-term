@@ -12,6 +12,10 @@ export const DB_EXECUTE_QUERY_REQUEST = 'DB_EXECUTE_QUERY_REQUEST';
 export const DB_EXECUTE_QUERY_SUCCESS = 'DB_EXECUTE_QUERY_SUCCESS';
 export const DB_EXECUTE_QUERY_FAILURE = 'DB_EXECUTE_QUERY_FAILURE';
 
+export const DB_FETCH_DATABASES_REQUEST = 'DB_FETCH_DATABASES_REQUEST';
+export const DB_FETCH_DATABASES_SUCCESS = 'DB_FETCH_DATABASES_SUCCESS';
+export const DB_FETCH_DATABASES_FAILURE = 'DB_FETCH_DATABASES_FAILURE';
+
 
 export function connect (serverId, database) {
   return async (dispatch, getState) => {
@@ -42,6 +46,15 @@ export function fetchTablesIfNeeded () {
   return (dispatch, getState) => {
     if (shouldFetchTables(getState())) {
       return dispatch(fetchTables());
+    }
+  };
+}
+
+
+export function fetchDatabasesIfNeeded () {
+  return (dispatch, getState) => {
+    if (shouldFetchDatabases(getState())) {
+      return dispatch(fetchDatabases());
     }
   };
 }
@@ -84,6 +97,27 @@ function executeQuery (query) {
       dispatch({ type: DB_EXECUTE_QUERY_SUCCESS, query, result });
     } catch (error) {
       dispatch({ type: DB_EXECUTE_QUERY_FAILURE, query, error });
+    }
+  };
+}
+
+
+function shouldFetchDatabases (state) {
+  const databases = state.databases;
+  if (!databases) return true;
+  if (databases.isFetching) return false;
+  return databases.didInvalidate;
+}
+
+
+function fetchDatabases () {
+  return async dispatch => {
+    dispatch({ type: DB_FETCH_DATABASES_REQUEST });
+    try {
+      const databases = await service.listDatabases();
+      dispatch({ type: DB_FETCH_DATABASES_SUCCESS, databases });
+    } catch (error) {
+      dispatch({ type: DB_FETCH_DATABASES_FAILURE, error });
     }
   };
 }

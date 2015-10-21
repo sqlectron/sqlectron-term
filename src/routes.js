@@ -19,6 +19,7 @@ export default
         <Route path="server/:id/remove" component={require('./containers/server-remove')} />
         <Route component={require('./containers/connection')}>
           <Route path="server/:id/database/:database" component={require('./containers/database')} />
+          <Route path="server/:id/database/:database/databases" component={require('./containers/database-list')} />
         </Route>
       </Route>
     </Router>
