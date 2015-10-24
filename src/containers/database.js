@@ -69,6 +69,10 @@ class Database extends Component {
     this.context.history.pushState(null, route);
   }
 
+  handleListServers () {
+    this.context.history.pushState(null, '/server/list');
+  }
+
   handleClearQuery () {
     this.refs.queryArea.setValue('');
   }
@@ -79,6 +83,7 @@ class Database extends Component {
     const tableListShortcuts = [
       { key: 'return', label: 'Select', handler: ::this.handleSelectTable },
       { key: 'c', label: 'Change database', handler: ::this.handleChangeDatabase },
+      { key: 's', label: 'List servers', handler: ::this.handleListServers },
     ];
     const queryAreaShortcuts = [
       { key: 'C-c', label: 'Clear', handler: ::this.handleClearQuery },
