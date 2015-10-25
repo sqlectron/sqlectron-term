@@ -15,7 +15,7 @@ npm run dev
 - /server/:id/edit
 - /server/:id/remove
 - /server/:id/database/:database
-- /server/:id/database/list
+- /server/:id/database/:database/databases
 
 ## features
 
