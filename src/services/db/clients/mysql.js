@@ -1,4 +1,4 @@
-import { Client } from 'pg';
+import mysql from 'mysql';
 import connectTunnel from '../tunnel';
 
 
@@ -23,7 +23,7 @@ export default function (serverInfo, databaseName) {
       ? tunnel.address().port
       : 0;
 
-    const client = new Client(
+    const client = mysql.createConnection(
       _configDatabase(serverInfo, databaseName, localPort)
     );
 
@@ -61,13 +61,11 @@ export function disconnect (client) {
 
 export function listTables (client) {
   return new Promise((resolve, reject) => {
-    const sql = `select table_name from information_schema.tables where table_schema = $1 order by table_name`;
-    const params = [
-      'public',
-    ];
+    const sql = 'select table_name from information_schema.tables where table_schema = database() order by table_name';
+    const params = [];
     client.query(sql, params, (err, data) => {
       if (err) return reject(err);
-      resolve(data.rows.map(row => row.table_name));
+      resolve(data.map(row => row.table_name));
     });
   });
 }
@@ -75,11 +73,11 @@ export function listTables (client) {
 
 export function executeQuery (client, query) {
   return new Promise((resolve, reject) => {
-    client.query(query, (err, data) => {
+    client.query(query, (err, data, fields) => {
       if (err) return reject(err);
       resolve({
-        rows: data.rows,
-        fields: data.fields,
+        rows: fields ? data : [],
+        fields: fields,
       });
     });
   });
@@ -88,11 +86,10 @@ export function executeQuery (client, query) {
 
 export function listDatabases (client) {
   return new Promise((resolve, reject) => {
-    const sql = `select datname from pg_database where datistemplate = $1 order by datname`;
-    const params = [ false ];
-    client.query(sql, params, (err, data) => {
+    const sql = 'show databases';
+    client.query(sql, (err, data) => {
       if (err) return reject(err);
-      resolve(data.rows.map(row => row.datname));
+      resolve(data.map(row => row.Database));
     });
   });
 }

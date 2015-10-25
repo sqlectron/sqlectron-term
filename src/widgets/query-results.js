@@ -61,8 +61,8 @@ export default class QueryResults extends Component {
     let content = 'no results';
 
     if (result) {
-      const { command, rows, fields } = result;
-      if (command === 'SELECT') {
+      const { rows, fields } = result;
+      if (fields) {
         const data = [];
         const colsMax = fields.map(() => 0);
 

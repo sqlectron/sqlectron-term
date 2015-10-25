@@ -17,6 +17,7 @@ class Database extends Component {
 
     params: PropTypes.object.isRequired,
 
+    connections: PropTypes.any,
     tables: PropTypes.any,
     query: PropTypes.any,
   };
@@ -55,12 +56,23 @@ class Database extends Component {
   }
 
   handleSelectTable () {
-    const { tables } = this.props;
+    const { tables, connections } = this.props;
     if (!tables.items.length) return;
 
     const selected = this.refs.tableList.selected();
     const item = tables.items[selected];
-    const query = `select * from "${item}" limit 1000`;
+
+    let query;
+    switch (connections.server.client) {
+    case 'postgresql':
+      query = `select * from "${item}" limit 1000`;
+      break;
+    case 'mysql':
+      query = `select * from \`${item}\` limit 1000`;
+      break;
+    default: query = `select * from ${item} limit 1000`;
+    }
+
     this.props.dispatch(executeQueryIfNeeded(query));
   }
 
@@ -120,6 +132,7 @@ class Database extends Component {
 
 function mapStateToProps (state) {
   return {
+    connections: state.connections,
     tables: state.tables,
     query: state.queries,
   };
