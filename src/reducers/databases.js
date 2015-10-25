@@ -1,3 +1,4 @@
+import { DB_CONNECT_SUCCESS } from '../actions/connections';
 import * as types from '../actions/db';
 
 
@@ -7,7 +8,7 @@ export default function (state = {
   items: [],
 }, action) {
   switch (action.type) {
-  case types.DB_CONNECT_SUCCESS: {
+  case DB_CONNECT_SUCCESS: {
     return { ...state, items: [], didInvalidate: true };
   }
   case types.DB_FETCH_DATABASES_REQUEST: {

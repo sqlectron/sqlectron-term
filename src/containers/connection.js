@@ -2,47 +2,45 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import { setStatus } from '../actions/status';
-import { connect as connectDatabase } from '../actions/db';
+import { connectIfNeeded } from '../actions/connections';
 
 
 class Connection extends Component {
 
   static propTypes = {
-    children: PropTypes.element.isRequired,
     dispatch: PropTypes.func.isRequired,
     params: PropTypes.object.isRequired,
-    connected: PropTypes.bool,
-    connecting: PropTypes.bool,
+
+    children: PropTypes.element.isRequired,
+
+    isConnecting: PropTypes.bool,
+    isConnected: PropTypes.bool,
     error: PropTypes.any,
     isSameServer: PropTypes.bool.isRequired,
   };
 
   componentWillMount () {
-    const { dispatch, params, isSameServer, error } = this.props;
-    if (error || !isSameServer) dispatch(connectDatabase(params.id, params.database));
     this.handleProps(this.props);
   }
 
   componentWillReceiveProps (nextProps) {
-    const { dispatch, params, isSameServer, connecting, error } = nextProps;
-    if (!connecting && (error || !isSameServer)) {
-      dispatch(connectDatabase(params.id, params.database));
-    }
     this.handleProps(nextProps);
   }
 
   handleProps (props) {
-    const { dispatch, connected, connecting, error } = props;
+    const { dispatch, params, isConnecting, isConnected, error } = props;
 
-    if (error) dispatch(setStatus(error));
-    if (connecting) dispatch(setStatus('Connecting to server...'));
-    if (connected) dispatch(setStatus('Connection to server established'));
+    dispatch(connectIfNeeded(params.id, params.database));
+
+    if (error) return dispatch(setStatus(error));
+    if (isConnecting) return dispatch(setStatus('Connecting to server...'));
+    if (isConnected) return dispatch(setStatus('Connection to server established'));
   }
 
   render () {
-    const { children, connected, isSameServer } = this.props;
+    const { children, isConnected, isSameServer } = this.props;
 
-    if (!connected || !isSameServer) return <element width={0} />;
+    if (!isConnected || !isSameServer) return <element width={0} />;
 
     return children;
   }
@@ -50,15 +48,15 @@ class Connection extends Component {
 
 
 function mapStateToProps (state, props) {
-  const { connection } = state;
+  const { connections } = state;
 
   const isSameServer =
-    connection
-    && connection.server
-    && parseInt(props.params.id, 10) === connection.server.id
-    && props.params.database === connection.database;
+      connections
+      && connections.server
+      && connections.server.id === parseInt(props.params.id, 10)
+      && connections.database === props.params.database;
 
-  return { ...connection, isSameServer: !!isSameServer };
+  return { ...connections, isSameServer: !!isSameServer };
 }
 
 export default connect(mapStateToProps)(Connection);

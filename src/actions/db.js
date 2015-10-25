@@ -1,9 +1,5 @@
 import * as service from '../services/db';
 
-export const DB_CONNECT_REQUEST = 'DB_CONNECT_REQUEST';
-export const DB_CONNECT_SUCCESS = 'DB_CONNECT_SUCCESS';
-export const DB_CONNECT_FAILURE = 'DB_CONNECT_FAILURE';
-
 export const DB_FETCH_TABLES_REQUEST = 'DB_FETCH_TABLES_REQUEST';
 export const DB_FETCH_TABLES_SUCCESS = 'DB_FETCH_TABLES_SUCCESS';
 export const DB_FETCH_TABLES_FAILURE = 'DB_FETCH_TABLES_FAILURE';
@@ -15,22 +11,6 @@ export const DB_EXECUTE_QUERY_FAILURE = 'DB_EXECUTE_QUERY_FAILURE';
 export const DB_FETCH_DATABASES_REQUEST = 'DB_FETCH_DATABASES_REQUEST';
 export const DB_FETCH_DATABASES_SUCCESS = 'DB_FETCH_DATABASES_SUCCESS';
 export const DB_FETCH_DATABASES_FAILURE = 'DB_FETCH_DATABASES_FAILURE';
-
-
-export function connect (serverId, database) {
-  return async (dispatch, getState) => {
-    const { servers } = getState();
-    const server = servers.servers[parseInt(serverId, 10)];
-
-    dispatch({ type: DB_CONNECT_REQUEST, server, database });
-    try {
-      await service.connect(server, database);
-      dispatch({ type: DB_CONNECT_SUCCESS, server, database });
-    } catch (error) {
-      dispatch({ type: DB_CONNECT_FAILURE, server, database, error });
-    }
-  };
-}
 
 
 export function executeQueryIfNeeded (query) {

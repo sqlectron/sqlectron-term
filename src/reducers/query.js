@@ -1,9 +1,10 @@
+import { DB_CONNECT_SUCCESS } from '../actions/connections';
 import * as types from '../actions/db';
 
 
 export default function (state = reset(), action) {
   switch (action.type) {
-  case types.DB_CONNECT_SUCCESS: {
+  case DB_CONNECT_SUCCESS: {
     return reset();
   }
   case types.DB_EXECUTE_QUERY_REQUEST: {

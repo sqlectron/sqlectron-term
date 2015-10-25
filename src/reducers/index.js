@@ -3,7 +3,7 @@ import { combineReducers } from 'redux';
 
 export default combineReducers({
   addServer: require('./add-server'),
-  connection: require('./connection'),
+  connections: require('./connections'),
   databases: require('./databases'),
   query: require('./query'),
   updateServer: require('./update-server'),
