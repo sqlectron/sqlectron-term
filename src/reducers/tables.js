@@ -1,31 +1,34 @@
 import { DB_CONNECT_SUCCESS } from '../actions/connections';
-import * as types from '../actions/db';
+import {
+  DB_FETCH_TABLES_REQUEST,
+  DB_FETCH_TABLES_SUCCESS,
+  DB_FETCH_TABLES_FAILURE,
+} from '../actions/tables';
 
 
-export default function (state = {
+const initialState = {
   isFetching: false,
   didInvalidate: false,
   items: [],
-}, action) {
+  error: null,
+};
+
+
+export default function (state = initialState, action) {
   switch (action.type) {
   case DB_CONNECT_SUCCESS: {
     return { ...state, items: [], didInvalidate: true };
   }
-  case types.DB_FETCH_TABLES_REQUEST: {
+  case DB_FETCH_TABLES_REQUEST: {
     return { ...state, isFetching: true, didInvalidate: false, error: null };
   }
-  case types.DB_FETCH_TABLES_SUCCESS: {
-    return {
-      ...state,
-      isFetching: false,
-      didInvalidate: false,
-      items: action.tables,
-      error: null,
-    };
+  case DB_FETCH_TABLES_SUCCESS: {
+    return { ...state, isFetching: false, items: action.tables };
   }
-  case types.DB_FETCH_TABLES_FAILURE: {
+  case DB_FETCH_TABLES_FAILURE: {
     return {
       ...state,
+      items: [],
       isFetching: false,
       didInvalidate: true,
       error: action.error,

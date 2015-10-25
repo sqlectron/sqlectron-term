@@ -1,20 +1,28 @@
 import { DB_CONNECT_SUCCESS } from '../actions/connections';
-import * as types from '../actions/db';
+import {
+  DB_FETCH_DATABASES_REQUEST,
+  DB_FETCH_DATABASES_SUCCESS,
+  DB_FETCH_DATABASES_FAILURE,
+} from '../actions/databases';
 
 
-export default function (state = {
+const initialState = {
   isFetching: false,
   didInvalidate: false,
   items: [],
-}, action) {
+  error: null,
+};
+
+
+export default function (state = initialState, action) {
   switch (action.type) {
   case DB_CONNECT_SUCCESS: {
     return { ...state, items: [], didInvalidate: true };
   }
-  case types.DB_FETCH_DATABASES_REQUEST: {
+  case DB_FETCH_DATABASES_REQUEST: {
     return { ...state, isFetching: true, didInvalidate: false, error: null };
   }
-  case types.DB_FETCH_DATABASES_SUCCESS: {
+  case DB_FETCH_DATABASES_SUCCESS: {
     return {
       ...state,
       isFetching: false,
@@ -23,7 +31,7 @@ export default function (state = {
       error: null,
     };
   }
-  case types.DB_FETCH_DATABASES_FAILURE: {
+  case DB_FETCH_DATABASES_FAILURE: {
     return {
       ...state,
       isFetching: false,

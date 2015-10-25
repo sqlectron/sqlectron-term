@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { fetchTablesIfNeeded, executeQueryIfNeeded } from '../actions/db';
+import { fetchTablesIfNeeded } from '../actions/tables';
+import { executeQueryIfNeeded } from '../actions/queries';
 import { setStatus, clearStatus } from '../actions/status';
 
 import Shortcuts from './shortcuts';
@@ -120,7 +121,7 @@ class Database extends Component {
 function mapStateToProps (state) {
   return {
     tables: state.tables,
-    query: state.query,
+    query: state.queries,
   };
 }
 

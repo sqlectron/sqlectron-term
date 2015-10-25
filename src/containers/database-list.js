@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { fetchDatabasesIfNeeded } from '../actions/db';
+import { fetchDatabasesIfNeeded } from '../actions/databases';
 import { setStatus, clearStatus } from '../actions/status';
 
 import Shortcuts from './shortcuts';
