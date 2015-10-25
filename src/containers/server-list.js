@@ -50,15 +50,29 @@ class ServerListContainer extends Component {
     this.context.history.pushState(null, '/server/add');
   }
 
-  handleEdit (server) {
-    this.context.history.pushState(null, `/server/${server.id}/edit`);
+  handleEdit () {
+    const { servers } = this.props;
+    if (!servers.length) return;
+
+    const selected = this.refs.serverList.selected();
+    this.context.history.pushState(null, `/server/${selected}/edit`);
   }
 
-  handleRemove (server) {
-    this.context.history.pushState(null, `/server/${server.id}/remove`);
+  handleRemove () {
+    const { servers } = this.props;
+    if (!servers.length) return;
+
+    const selected = this.refs.serverList.selected();
+    this.context.history.pushState(null, `/server/${selected}/remove`);
   }
 
-  handleConnect (server) {
+  handleConnect () {
+    const { servers } = this.props;
+    if (!servers.length) return;
+
+    const selected = this.refs.serverList.selected();
+    const server = servers[selected];
+
     const route = `/server/${server.id}/database/${server.database}`;
     this.context.history.pushState(null, route);
   }
@@ -79,17 +93,14 @@ class ServerListContainer extends Component {
 
     return (
       <Shortcuts items={[
-        { key: 'A', label: 'Add new' },
-        { key: 'E', label: 'Edit' },
-        { key: 'R', label: 'Remove' },
-        { key: 'Enter', label: 'Connect' },
+        { key: 'a', label: 'Add new', handler: ::this.handleAdd },
+        { key: 'e', label: 'Edit', handler: ::this.handleEdit },
+        { key: 'r', label: 'Remove', handler: ::this.handleRemove },
+        { key: 'return', label: 'Connect', handler: ::this.handleConnect },
       ]}>
         <ServerList
+          ref="serverList"
           servers={servers}
-          onAdd={::this.handleAdd}
-          onEdit={::this.handleEdit}
-          onRemove={::this.handleRemove}
-          onConnect={::this.handleConnect}
           onSelected={::this.handleSelected}
         />
       </Shortcuts>

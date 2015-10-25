@@ -16,11 +16,8 @@ export default class ServerList extends Component {
     // events
     onFocus: PropTypes.func,
     onBlur: PropTypes.func,
+    onKeypress: PropTypes.func,
     // actions
-    onAdd: PropTypes.func,
-    onEdit: PropTypes.func,
-    onRemove: PropTypes.func,
-    onConnect: PropTypes.func,
     onSelected: PropTypes.func,
   };
 
@@ -28,37 +25,13 @@ export default class ServerList extends Component {
     if (this.refs.list) this.refs.list.focus();
   }
 
-  handleKeypress (ch, key) {
-    const { servers, onAdd, onEdit, onRemove, onConnect } = this.props;
+  selected () {
+    if (this.refs.list) return this.refs.list.selected;
+    return 0;
+  }
 
-    switch (key.name) {
-    case 'enter': {
-      if (onConnect && servers && servers.length) {
-        const serverId = this.refs.list.selected;
-        onConnect(servers[serverId]);
-      }
-      break;
-    }
-    case 'a': {
-      if (onAdd) onAdd();
-      break;
-    }
-    case 'e': {
-      if (onEdit && servers && servers.length) {
-        const serverId = this.refs.list.selected;
-        onEdit(servers[serverId]);
-      }
-      break;
-    }
-    case 'r': {
-      if (onRemove && servers && servers.length) {
-        const serverId = this.refs.list.selected;
-        onRemove(servers[serverId]);
-      }
-      break;
-    }
-    default: return;
-    }
+  focus () {
+    this.refs.list.focus();
   }
 
   handleSelectItem () {
@@ -70,11 +43,15 @@ export default class ServerList extends Component {
   }
 
   handleFocus () {
-    if (this.props.onFocus) this.props.onFocus(this);
+    if (this.props.onFocus) this.props.onFocus();
   }
 
   handleBlur () {
-    if (this.props.onBlur) this.props.onBlur(this);
+    if (this.props.onBlur) this.props.onBlur();
+  }
+
+  handleKeypress (ch, info) {
+    if (this.props.onKeypress) this.props.onKeypress(ch, info);
   }
 
   render () {
