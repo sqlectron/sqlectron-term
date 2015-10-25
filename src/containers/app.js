@@ -28,8 +28,8 @@ class App extends Component {
   render () {
     const { children, status } = this.props;
     const shortcuts = [
-      { key: 'Q', label: 'Quit' },
-      { key: 'Escape', label: 'Back' },
+      { key: 'q', label: 'Quit' },
+      { key: 'escape', label: 'Back' },
       ...this.props.shortcuts,
     ];
     return (
