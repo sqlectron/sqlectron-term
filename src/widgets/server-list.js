@@ -58,21 +58,19 @@ export default class ServerList extends Component {
     const items = servers.map(server => server.name);
 
     return (
-      <list ref="list"
-            style={merge({}, theme.list.normal, theme.list.focus)}
-            left="center"
-            top="center"
-            border="line"
-            keys="true"
-            mouse="true"
-            shadow="true"
-            label=" Server list "
-            items={items}
-            scrollbar="true"
-            onFocus={::this.handleFocus}
-            onBlur={::this.handleBlur}
-            onKeypress={::this.handleKeypress}
-            {...{ 'onSelect Item': ::this.handleSelectItem } }
+      <list
+        keys mouse shadow scrollbar
+        ref="list"
+        style={merge({}, theme.list.normal, theme.list.focus)}
+        left="center"
+        top="center"
+        border="line"
+        label=" Server list "
+        items={items}
+        onFocus={::this.handleFocus}
+        onBlur={::this.handleBlur}
+        onKeypress={::this.handleKeypress}
+        {...{ 'onSelect Item': ::this.handleSelectItem } }
       />
     );
   }

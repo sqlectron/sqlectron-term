@@ -72,9 +72,8 @@ export default class Textarea extends Component {
     const { theme } = this.context;
     return (
       <textarea
+        keys mouse
         ref="textarea"
-        keys="true"
-        mouse="true"
         border="line"
         style={this.state.focused ? merge({}, theme.box.normal, theme.box.focus) : theme.box.normal}
         onFocus={::this.handleFocus}

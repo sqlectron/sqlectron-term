@@ -46,20 +46,18 @@ export default class DatabaseList extends Component {
     const { theme } = this.context;
 
     return (
-      <list ref="list"
-            style={merge({}, theme.list.normal, theme.list.focus)}
-            left="center"
-            top="center"
-            border="line"
-            keys="true"
-            mouse="true"
-            shadow="true"
-            label=" Database list "
-            scrollbar="true"
-            items={items}
-            onFocus={::this.handleFocus}
-            onBlur={::this.handleBlur}
-            onKeypress={::this.handleKeypress}
+      <list
+        keys mouse shadow scrollbar
+        ref="list"
+        style={merge({}, theme.list.normal, theme.list.focus)}
+        left="center"
+        top="center"
+        border="line"
+        label=" Database list "
+        items={items}
+        onFocus={::this.handleFocus}
+        onBlur={::this.handleBlur}
+        onKeypress={::this.handleKeypress}
       />
     );
   }

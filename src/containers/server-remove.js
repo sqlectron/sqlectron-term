@@ -36,28 +36,26 @@ class ServerRemove extends Component {
     const { servers, params } = this.props;
     const server = servers[parseInt(params.id, 10)];
     return (
-      <box shrink="true" left="center" top="center" height={8} border="line" shadow="true">
+      <box shrink shadow left="center" top="center" height={8} border="line">
         <text
               top={1}
               height={2}
               content={` Are you sure you want to remove server [${server.client} - ${server.name}]? `}
         />
         <box left="center" bottom={1} height={1} width={10}>
-          <button left={0}
-                  bottom={0}
-                  shrink="true"
-                  content=" Yes "
-                  mouse="true"
-                  keys="true"
-                  onPress={this.onPress.bind(this, 'yes')}
+          <button
+            shrink mouse keys
+            left={0}
+            bottom={0}
+            content=" Yes "
+            onPress={this.onPress.bind(this, 'yes')}
           />
-          <button left={6}
-                  bottom={0}
-                  shrink="true"
-                  content=" No "
-                  mouse="true"
-                  keys="true"
-                  onPress={this.onPress.bind(this, 'no')}
+          <button
+            shrink mouse keys
+            left={6}
+            bottom={0}
+            content=" No "
+            onPress={this.onPress.bind(this, 'no')}
           />
         </box>
       </box>

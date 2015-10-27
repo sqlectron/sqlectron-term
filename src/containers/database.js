@@ -112,7 +112,7 @@ class Database extends Component {
     const queryResultsShortcuts = [ { key: 'C-e', label: 'Editor' } ];
 
     return (
-      <box top={1} left={1} bottom={2} right={3} shadow="true">
+      <box shadow top={1} left={1} bottom={2} right={3}>
         <box left={0} top={0} bottom={0} width={30}>
           <Shortcuts items={tableListShortcuts}>
             <TableList ref="tableList" items={tables.items} />
