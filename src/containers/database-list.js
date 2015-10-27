@@ -64,7 +64,7 @@ class DatabaseListContainer extends Component {
       { key: 'return', label: 'Select', handler: ::this.handleSelect },
     ];
 
-    if (error || isFetching) return <element width={0} />;
+    if (error || isFetching) return <element hidden />;
 
     return (
       <Shortcuts items={shortcuts}>

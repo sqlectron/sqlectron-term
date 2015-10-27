@@ -89,7 +89,7 @@ class ServerListContainer extends Component {
   render () {
     const { loading, servers, error } = this.props;
 
-    if (error || loading) return <element width={0} />;
+    if (error || loading) return <element hidden />;
 
     return (
       <Shortcuts items={[

@@ -40,7 +40,7 @@ class Connection extends Component {
   render () {
     const { children, isConnected, isSameServer } = this.props;
 
-    if (!isConnected || !isSameServer) return <element width={0} />;
+    if (!isConnected || !isSameServer) return <element hidden />;
 
     return children;
   }
