@@ -1,12 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-
-
-const style = {
-  list: {
-    selected: { bg: 'blue', bold: true },
-  },
-  error: { fg: 'red' },
-};
+import { merge } from 'lodash';
 
 
 export default class ServerList extends Component {
@@ -19,6 +12,10 @@ export default class ServerList extends Component {
     onKeypress: PropTypes.func,
     // actions
     onSelected: PropTypes.func,
+  };
+
+  static contextTypes = {
+    theme: PropTypes.object.isRequired,
   };
 
   componentDidMount () {
@@ -56,12 +53,13 @@ export default class ServerList extends Component {
 
   render () {
     const { servers } = this.props;
+    const { theme } = this.context;
 
     const items = servers.map(server => server.name);
 
     return (
       <list ref="list"
-            style={style.list}
+            style={merge({}, theme.list.normal, theme.list.focus)}
             left="center"
             top="center"
             border="line"
@@ -69,12 +67,8 @@ export default class ServerList extends Component {
             mouse="true"
             shadow="true"
             label=" Server list "
-            scrollbar={{
-              ch: ' ',
-              track: { bg: 'cyan' },
-              style: { inverse: true },
-            }}
             items={items}
+            scrollbar="true"
             onFocus={::this.handleFocus}
             onBlur={::this.handleBlur}
             onKeypress={::this.handleKeypress}

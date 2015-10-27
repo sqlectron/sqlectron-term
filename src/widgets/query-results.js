@@ -1,14 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-
-
-const style = {
-  focus: {
-    border: { fg: 'cyan' },
-  },
-  blur: {
-    border: { fg: 'white' },
-  },
-};
+import { merge } from 'lodash';
 
 
 export default class QueryResults extends Component {
@@ -17,6 +8,10 @@ export default class QueryResults extends Component {
     onFocus: PropTypes.func,
     onBlur: PropTypes.func,
     result: PropTypes.any,
+  };
+
+  static contextTypes = {
+    theme: PropTypes.object.isRequired,
   };
 
   constructor (props) {
@@ -36,12 +31,12 @@ export default class QueryResults extends Component {
   handleFocus () {
     this.refs.textarea.readInput();
     this.setState({ focused: true });
-    if (this.props.onFocus) this.props.onFocus(this);
+    if (this.props.onFocus) this.props.onFocus();
   }
 
   handleBlur () {
     this.setState({ focused: false });
-    if (this.props.onBlur) this.props.onBlur(this);
+    if (this.props.onBlur) this.props.onBlur();
   }
 
   handleKeypress (ch, info) {
@@ -58,6 +53,8 @@ export default class QueryResults extends Component {
 
   render () {
     const { result } = this.props;
+    const { theme } = this.context;
+
     let content = 'no results';
 
     if (result) {
@@ -105,18 +102,15 @@ export default class QueryResults extends Component {
     return (
       <box
         border="line"
-        label="Result"
-        style={this.state.focused ? style.focus : style.blur }
+        label=" Result "
+        style={this.state.focused ? merge({}, theme.box.normal, theme.box.focus) : theme.box.normal}
       >
         <textarea
           ref="textarea"
+          style={theme.box.normal}
           mouse="true"
           keys="true"
-          scrollbar={{
-            ch: ' ',
-            track: { bg: 'cyan' },
-            style: { inverse: true },
-          }}
+          scrollbar="true"
           scrollable="true"
           onFocus={::this.handleFocus}
           onBlur={::this.handleBlur}

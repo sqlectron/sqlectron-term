@@ -1,12 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-
-
-const style = {
-  list: {
-    selected: { bg: 'blue', bold: true },
-  },
-  error: { fg: 'red' },
-};
+import { merge } from 'lodash';
 
 
 export default class DatabaseList extends Component {
@@ -17,6 +10,10 @@ export default class DatabaseList extends Component {
     onFocus: PropTypes.func,
     onBlur: PropTypes.func,
     onKeypress: PropTypes.func,
+  };
+
+  static contextTypes = {
+    theme: PropTypes.object.isRequired,
   };
 
   componentDidMount () {
@@ -46,10 +43,11 @@ export default class DatabaseList extends Component {
 
   render () {
     const { items } = this.props;
+    const { theme } = this.context;
 
     return (
       <list ref="list"
-            style={style.list}
+            style={merge({}, theme.list.normal, theme.list.focus)}
             left="center"
             top="center"
             border="line"
@@ -57,11 +55,7 @@ export default class DatabaseList extends Component {
             mouse="true"
             shadow="true"
             label=" Database list "
-            scrollbar={{
-              ch: ' ',
-              track: { bg: 'cyan' },
-              style: { inverse: true },
-            }}
+            scrollbar="true"
             items={items}
             onFocus={::this.handleFocus}
             onBlur={::this.handleBlur}

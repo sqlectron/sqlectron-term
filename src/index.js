@@ -10,7 +10,7 @@ const screen = blessed.screen({
   autoPadding: true,
   smartCSR: true,
   dockBorders: true,
-  title: 'SQLectron',
+  title: 'SQLECTRON',
 });
 
 
@@ -20,14 +20,6 @@ screen.key(['escape'], () => {
   } catch (error) {
     process.exit(0);
   }
-});
-
-
-screen.key(['tab'], () => {
-  screen.focusNext();
-});
-screen.key(['S-tab'], () => {
-  screen.focusPrev();
 });
 
 

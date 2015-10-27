@@ -35,7 +35,7 @@ npm run dev
 - [x] try to enhance shortcut control to work directly on screen
 - [x] list databases
 - [x] improve db connect action (work similar to fetchTablesIfNeeded)
-- [ ] improve style handling
+- [x] improve style handling
 - [ ] improve servers handling (work similar to fetchTablesIfNeeded)
 - [ ] show selected table name in status bar
 - [ ] improve server add / edit screen (similar to database container)

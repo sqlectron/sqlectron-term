@@ -1,14 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-
-
-const style = {
-  focus: {
-    border: { fg: 'cyan' },
-  },
-  blur: {
-    border: { fg: 'white' },
-  },
-};
+import { merge } from 'lodash';
 
 
 export default class Textarea extends Component {
@@ -19,6 +10,10 @@ export default class Textarea extends Component {
     onFocus: PropTypes.func,
     onBlur: PropTypes.func,
     onKeypress: PropTypes.func,
+  };
+
+  static contextTypes = {
+    theme: PropTypes.object.isRequired,
   };
 
   constructor (props) {
@@ -74,13 +69,14 @@ export default class Textarea extends Component {
   }
 
   render () {
+    const { theme } = this.context;
     return (
       <textarea
         ref="textarea"
         keys="true"
         mouse="true"
         border="line"
-        style={this.state.focused ? style.focus : style.blur }
+        style={this.state.focused ? merge({}, theme.box.normal, theme.box.focus) : theme.box.normal}
         onFocus={::this.handleFocus}
         onBlur={::this.handleBlur}
         onKeypress={::this.handleKeypress}

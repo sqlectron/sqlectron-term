@@ -24,6 +24,7 @@ class Database extends Component {
 
   static contextTypes = {
     history: PropTypes.object.isRequired,
+    theme: PropTypes.object.isRequired,
   };
 
   componentWillMount () {
@@ -37,6 +38,10 @@ class Database extends Component {
 
   componentWillReceiveProps (nextProps) {
     this.handleEvents(nextProps);
+  }
+
+  componentDidUpdate () {
+    this.refs.tableList.focus();
   }
 
   handleEvents ({ tables, query }) {
@@ -92,6 +97,7 @@ class Database extends Component {
 
   render () {
     const { tables, query } = this.props;
+    const { theme } = this.context;
 
     const tableListShortcuts = [
       { key: 'return', label: 'Select', handler: ::this.handleSelectTable },
@@ -116,7 +122,7 @@ class Database extends Component {
           <Shortcuts items={queryAreaShortcuts}>
             <Textarea ref="queryArea" defaultValue={query.query} />
           </Shortcuts>
-          <text top={0} left={2} content="Query" />
+          <text top={0} left={2} style={theme.box.normal} content=" Query " />
         </box>
         <box left={30} top={5} bottom={0} right={0}>
           <Shortcuts items={queryResultsShortcuts}>

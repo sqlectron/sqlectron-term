@@ -1,17 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-
-
-const style = {
-  list: {
-    selected: { bg: 'blue', bold: true },
-  },
-  focus: {
-    border: { fg: 'cyan' },
-  },
-  blur: {
-    border: { fg: 'white' },
-  },
-};
+import { merge } from 'lodash';
 
 
 export default class TableList extends Component {
@@ -22,6 +10,10 @@ export default class TableList extends Component {
     onFocus: PropTypes.func,
     onBlur: PropTypes.func,
     onKeypress: PropTypes.func,
+  };
+
+  static contextTypes = {
+    theme: PropTypes.object.isRequired,
   };
 
   constructor (props) {
@@ -51,23 +43,30 @@ export default class TableList extends Component {
 
   handleKeypress (ch, key) {
     if (this.props.onKeypress) this.props.onKeypress(ch, key);
+    switch (key.full) {
+    case 'tab':
+      this.refs.list.screen.focusNext();
+      break;
+    case 'S-tab':
+      this.refs.list.screen.focusPrev();
+      break;
+    default: return false;
+    }
   }
 
   render () {
     const { items } = this.props;
+    const { theme } = this.context;
+
     return (
       <list
         ref="list"
         keys="true"
         mouse="true"
         border="line"
-        label="Tables"
-        scrollbar={{
-          ch: 'x',
-          track: { bg: 'cyan' },
-          style: { inverse: true },
-        }}
-        style={{ ...style.list, ...(this.state.focused ? style.focus : style.blur)}}
+        label=" Tables "
+        scrollbar="true"
+        style={this.state.focused ? merge({}, theme.list.normal, theme.list.focus) : theme.list.normal}
         onFocus={::this.handleFocus}
         onBlur={::this.handleBlur}
         onKeypress={::this.handleKeypress}

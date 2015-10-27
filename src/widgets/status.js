@@ -1,20 +1,16 @@
 import React, { PropTypes } from 'react';
 
 
-const style = {
-  status: {
-    bg: '#00cfd0',
-    fg: '#000000',
-  },
-};
-
-
-export default function Status ({ status = '' }) {
+export default function Status ({ status = '' }, { theme }) {
   return (
-    <text right={0} bottom={1} left={0} style={style.status} content={' ' + status} />
+    <text right={0} bottom={1} left={0} style={theme.status} content={' ' + status} />
   );
 }
 
 Status.propTypes = {
   status: PropTypes.string,
+};
+
+Status.contextTypes = {
+  theme: PropTypes.object.isRequired,
 };
