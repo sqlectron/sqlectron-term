@@ -1,3 +1,4 @@
+const red = '#ff0000';
 const white = '#ffffff';
 const blue = '#0000d3';
 const green = '#00cfd0';
@@ -38,6 +39,10 @@ const styles = {
     focus: {
       border: { fg: cyan },
     },
+  },
+  danger: {
+    bg: red,
+    border: { fg: white, bg: red },
   },
 };
 
