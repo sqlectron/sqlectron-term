@@ -27,7 +27,7 @@ class App extends Component {
     ];
     return (
       <box top={0} left={0} bottom={0} right={0} style={theme.header}>
-        <text tags="true" style={theme.header} content=" SQLECTRON" />
+        <text style={theme.header} content=" SQLECTRON" />
         <box top={1} left={0} right={0} bottom={2} style={theme.main}>
           {children}
         </box>
