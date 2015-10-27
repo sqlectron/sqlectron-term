@@ -26,9 +26,9 @@ class App extends Component {
       ...this.props.shortcuts,
     ];
     return (
-      <box top={0} left={0} bottom={0} right={0} style={theme.header}>
+      <box position={{ top: 0, left: 0, bottom: 0, right: 0 }} style={theme.header}>
         <text style={theme.header} content=" SQLECTRON" />
-        <box top={1} left={0} right={0} bottom={2} style={theme.main}>
+        <box position={{ top: 1, left: 0, right: 0, bottom: 2 }} style={theme.main}>
           {children}
         </box>
         <Status status={status} />

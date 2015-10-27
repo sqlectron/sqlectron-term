@@ -112,19 +112,19 @@ class Database extends Component {
     const queryResultsShortcuts = [ { key: 'C-e', label: 'Editor' } ];
 
     return (
-      <box shadow top={1} left={1} bottom={2} right={3}>
-        <box left={0} top={0} bottom={0} width={30}>
+      <box shadow position={{ top: 1, left: 1, bottom: 2, right: 3 }}>
+        <box position={{ left: 0, top: 0, bottom: 0, width: 30 }}>
           <Shortcuts items={tableListShortcuts}>
             <TableList ref="tableList" items={tables.items} />
           </Shortcuts>
         </box>
-        <box left={30} top={0} right={0} height={5}>
+        <box position={{ left: 30, top: 0, right: 0, height: 5 }}>
           <Shortcuts items={queryAreaShortcuts}>
             <Textarea ref="queryArea" defaultValue={query.query} />
           </Shortcuts>
-          <text top={0} left={2} style={theme.box.normal} content=" Query " />
+          <text position={{ top: 0, left: 2 }} style={theme.box.normal} content=" Query " />
         </box>
-        <box left={30} top={5} bottom={0} right={0}>
+        <box position={{ left: 30, top: 5, bottom: 0, right: 0 }}>
           <Shortcuts items={queryResultsShortcuts}>
             <QueryResults ref="queryResults" result={query.result} />
           </Shortcuts>

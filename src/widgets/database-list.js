@@ -50,8 +50,7 @@ export default class DatabaseList extends Component {
         keys mouse shadow scrollbar
         ref="list"
         style={merge({}, theme.list.normal, theme.list.focus)}
-        left="center"
-        top="center"
+        position={{ left: 'center', top: 'center' }}
         border="line"
         label=" Database list "
         items={items}

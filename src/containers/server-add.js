@@ -36,7 +36,7 @@ class ServerAdd extends Component {
 
   render () {
     return (
-      <box shadow left="center" top="center" height={21} width={80}>
+      <box shadow position={{ left: 'center', top: 'center', height: 21, width: 80 }}>
         <ServerForm onSubmit={::this.onSubmit} />
       </box>
     );

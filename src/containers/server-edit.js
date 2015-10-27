@@ -39,7 +39,7 @@ class ServerEdit extends Component {
     const { servers, params } = this.props;
     const server = servers.servers[parseInt(params.id, 10)];
     return (
-      <box shadow left="center" top="center" height={21} width={80}>
+      <box shadow position={{ left: 'center', top: 'center', height: 21, width: 80 }}>
         <ServerForm server={server} onSubmit={::this.onSubmit} />
       </box>
     );
