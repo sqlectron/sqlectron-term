@@ -106,12 +106,9 @@ export default class QueryResults extends Component {
         style={this.state.focused ? merge({}, theme.box.normal, theme.box.focus) : theme.box.normal}
       >
         <textarea
+          mouse keys scrollbar
           ref="textarea"
           style={theme.box.normal}
-          mouse="true"
-          keys="true"
-          scrollbar="true"
-          scrollable="true"
           onFocus={::this.handleFocus}
           onBlur={::this.handleBlur}
           onKeypress={::this.handleKeypress}

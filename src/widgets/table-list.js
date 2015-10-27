@@ -60,12 +60,10 @@ export default class TableList extends Component {
 
     return (
       <list
+        keys mouse scrollbar
         ref="list"
-        keys="true"
-        mouse="true"
         border="line"
         label=" Tables "
-        scrollbar="true"
         style={this.state.focused ? merge({}, theme.list.normal, theme.list.focus) : theme.list.normal}
         onFocus={::this.handleFocus}
         onBlur={::this.handleBlur}
