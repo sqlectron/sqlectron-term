@@ -10,7 +10,7 @@
     "build": "babel --optional runtime src --out-dir lib",
     "dev": "babel-node src",
     "prepublish": "npm run test && npm run clean && npm run build",
-    "start": "node server"
+    "start": "node ."
   },
   "repository": {
     "type": "git",
