@@ -1,4 +1,4 @@
-import * as service from '../services/db';
+import { db as service } from 'sqlectron-core';
 
 export const DB_CONNECT_REQUEST = 'DB_CONNECT_REQUEST';
 export const DB_CONNECT_SUCCESS = 'DB_CONNECT_SUCCESS';

@@ -47,15 +47,12 @@
     "history": "^1.9.1",
     "is-my-json-valid": "^2.12.2",
     "lodash": "^3.10.1",
-    "mysql": "^2.9.0",
-    "pg": "^4.4.2",
-    "portfinder": "^0.4.0",
     "react": "^0.14.0-rc1",
     "react-blessed": "^0.1.7",
     "react-redux": "^2.1.2",
     "react-router": "^1.0.0-rc1",
     "redux": "^3.0.0",
     "redux-thunk": "^0.1.0",
-    "ssh2": "^0.4.11"
+    "sqlectron-core": "^0.3.0"
   }
 }

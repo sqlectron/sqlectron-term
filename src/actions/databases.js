@@ -1,4 +1,4 @@
-import * as service from '../services/db';
+import { db as service } from 'sqlectron-core';
 
 export const DB_FETCH_DATABASES_REQUEST = 'DB_FETCH_DATABASES_REQUEST';
 export const DB_FETCH_DATABASES_SUCCESS = 'DB_FETCH_DATABASES_SUCCESS';
