@@ -51,7 +51,7 @@
     "pg": "^4.4.2",
     "portfinder": "^0.4.0",
     "react": "^0.14.0-rc1",
-    "react-blessed": "^0.1.6",
+    "react-blessed": "^0.1.7",
     "react-redux": "^2.1.2",
     "react-router": "^1.0.0-rc1",
     "redux": "^3.0.0",
