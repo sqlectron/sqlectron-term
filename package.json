@@ -47,7 +47,7 @@
     "history": "^1.9.1",
     "is-my-json-valid": "^2.12.2",
     "lodash": "^3.10.1",
-    "react": "^0.14.0-rc1",
+    "react": "^0.14.2",
     "react-blessed": "^0.1.7",
     "react-redux": "^2.1.2",
     "react-router": "^1.0.0-rc1",
