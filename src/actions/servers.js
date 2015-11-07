@@ -1,65 +1,70 @@
-import * as service from '../services/servers';
+import { servers as service } from 'sqlectron-core';
 
+export const FETCH_SERVERS_REQUEST = 'FETCH_SERVERS_REQUEST';
+export const FETCH_SERVERS_SUCCESS = 'FETCH_SERVERS_SUCCESS';
+export const FETCH_SERVERS_FAILURE = 'FETCH_SERVERS_FAILURE';
 
-export const LOAD_SERVER_LIST_REQUEST = 'LOAD_SERVER_LIST_REQUEST';
-export const LOAD_SERVER_LIST_SUCCESS = 'LOAD_SERVER_LIST_SUCCESS';
-export const LOAD_SERVER_LIST_FAILURE = 'LOAD_SERVER_LIST_FAILURE';
-
-export const ADD_SERVER_REQUEST = 'ADD_SERVER_REQUEST';
-export const ADD_SERVER_SUCCESS = 'ADD_SERVER_SUCCESS';
-export const ADD_SERVER_FAILURE = 'ADD_SERVER_FAILURE';
-
-export const UPDATE_SERVER_REQUEST = 'UPDATE_SERVER_REQUEST';
-export const UPDATE_SERVER_SUCCESS = 'UPDATE_SERVER_SUCCESS';
-export const UPDATE_SERVER_FAILURE = 'UPDATE_SERVER_FAILURE';
+export const SAVE_SERVER_PREPARE = 'SAVE_SERVER_PREPARE';
+export const SAVE_SERVER_REQUEST = 'SAVE_SERVER_REQUEST';
+export const SAVE_SERVER_SUCCESS = 'SAVE_SERVER_SUCCESS';
+export const SAVE_SERVER_FAILURE = 'SAVE_SERVER_FAILURE';
 
 export const REMOVE_SERVER = 'REMOVE_SERVER';
 
 
-export function loadServerList() {
+export function fetchServersIfNeeded () {
+  return (dispatch, getState) => {
+    if (shouldFetchServers(getState())) {
+      return dispatch(fetchServers());
+    }
+  };
+}
+
+
+function shouldFetchServers (state) {
+  const servers = state.servers;
+  if (!servers) return true;
+  if (servers.isFetching) return false;
+  return servers.didInvalidate;
+}
+
+
+function fetchServers () {
   return async dispatch => {
-    dispatch({ type: LOAD_SERVER_LIST_REQUEST });
+    dispatch({ type: FETCH_SERVERS_REQUEST });
     try {
-      const data = await service.loadServerListFromFile();
+      await service.prepareConfiguration();
+      const data = await service.getAll();
       dispatch({
-        type: LOAD_SERVER_LIST_SUCCESS,
+        type: FETCH_SERVERS_SUCCESS,
         servers: data.servers,
       });
     } catch (error) {
-      dispatch({ type: LOAD_SERVER_LIST_FAILURE, error });
+      dispatch({ type: FETCH_SERVERS_FAILURE, error });
     }
   };
 }
 
 
-export function addServer (server) {
-  return async dispatch => {
-    dispatch({ type: ADD_SERVER_REQUEST, server });
-    try {
-      const added = await service.addServer(server);
-      dispatch({
-        type: ADD_SERVER_SUCCESS,
-        server: added,
-      });
-    } catch (error) {
-      dispatch({ type: ADD_SERVER_FAILURE, error });
-    }
+export function prepareSaveServer (server) {
+  return {
+    type: SAVE_SERVER_PREPARE,
+    server,
   };
 }
 
 
-export function updateServer (id, server) {
+export function saveServer (server) {
   return async dispatch => {
-    dispatch({ type: UPDATE_SERVER_REQUEST, id, server });
+    dispatch({ type: SAVE_SERVER_REQUEST, server });
     try {
-      const updated = await service.updateServer(id, server);
+      const saved = await service.addOrUpdate(server);
       dispatch({
-        type: UPDATE_SERVER_SUCCESS,
-        id,
-        server: updated,
+        type: SAVE_SERVER_SUCCESS,
+        server: saved,
       });
     } catch (error) {
-      dispatch({ type: UPDATE_SERVER_FAILURE, id, error });
+      dispatch({ type: SAVE_SERVER_FAILURE, error });
     }
   };
 }
@@ -68,7 +73,7 @@ export function updateServer (id, server) {
 export function removeServer (id) {
   return async dispatch => {
     try {
-      await service.removeServer(id);
+      await service.removeById(id);
     } finally {
       dispatch({ type: REMOVE_SERVER, id });
     }

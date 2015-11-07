@@ -36,6 +36,7 @@ npm run dev
 - [x] list databases
 - [x] improve db connect action (work similar to fetchTablesIfNeeded)
 - [x] improve style handling
-- [ ] improve servers handling (work similar to fetchTablesIfNeeded)
+- [x] improve servers handling (work similar to fetchTablesIfNeeded)
+- [x] improve server add / edit screen (similar to database container)
+- [ ] improve error handling of add / edit server screen
 - [ ] show selected table name in status bar
-- [ ] improve server add / edit screen (similar to database container)

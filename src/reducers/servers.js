@@ -1,37 +1,50 @@
-import * as types from '../actions/servers';
+import { merge } from 'lodash';
+
+import {
+  FETCH_SERVERS_REQUEST,
+  FETCH_SERVERS_SUCCESS,
+  FETCH_SERVERS_FAILURE,
+  SAVE_SERVER_SUCCESS,
+  REMOVE_SERVER,
+} from '../actions/servers';
 
 
-export default function (state = { loading: true }, action) {
+const initialState = {
+  isFetching: false,
+  didInvalidate: true,
+  items: [],
+  error: null,
+};
+
+
+export default function (state = initialState, action) {
   switch (action.type) {
-  case types.LOAD_SERVER_LIST_REQUEST: {
-    return { loading: true };
+  case FETCH_SERVERS_REQUEST: {
+    return { ...state, isFetching: true, didInvalidate: false, error: null };
   }
-  case types.LOAD_SERVER_LIST_SUCCESS: {
-    const servers = action.servers.map(
-      (server, idx) => ({ ...server, id: idx })
-    );
-    return { loading: false, servers };
+  case FETCH_SERVERS_SUCCESS: {
+    return { ...state, isFetching: false, items: action.servers };
   }
-  case types.LOAD_SERVER_LIST_FAILURE: {
-    return { loading: false, error: action.error };
+  case FETCH_SERVERS_FAILURE: {
+    return {
+      ...initialState,
+      error: action.error,
+    };
   }
-  case types.ADD_SERVER_SUCCESS: {
-    const servers = [ ...(state.servers || []) ];
-    servers.push({ ...action.server, id: servers.length });
-    return { ...state, servers };
+  case SAVE_SERVER_SUCCESS: {
+    let found = false;
+    const server = merge({}, action.server);
+    const items = state.items.map(item => {
+      if (item.id !== server.id) return item;
+      found = true;
+      return server;
+    });
+    if (!found) items.push(server);
+    return { ...state, items };
   }
-  case types.UPDATE_SERVER_SUCCESS: {
-    const servers = [ ...state.servers || [] ];
-    servers[action.id] = { ...action.server, id: action.id };
-    return { ...state, servers };
-  }
-  case types.REMOVE_SERVER: {
-    const servers = [
-      ...state.servers.slice(0, action.id),
-      ...state.servers.slice(action.id + 1),
-    ];
-    servers.forEach((server, idx) => server.id = idx);
-    return { ...state, servers };
+  case REMOVE_SERVER: {
+    const items = state.items.filter(item => item.id !== action.id);
+    return { ...state, items };
   }
   default : return state;
   }

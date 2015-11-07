@@ -10,7 +10,7 @@ class ServerRemove extends Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     params: PropTypes.object.isRequired,
-    servers: PropTypes.array.isRequired,
+    items: PropTypes.array.isRequired,
   };
 
   static contextTypes = {
@@ -19,8 +19,9 @@ class ServerRemove extends Component {
   };
 
   componentWillMount () {
-    const id = parseInt(this.props.params.id, 10);
-    const server = this.props.servers[id];
+    const server = this.props.items
+      .find(srv => srv.id === this.props.params.id);
+
     this.props.dispatch(
       setStatus(`Server "${server.client} - ${server.name}" will be removed`)
     );
@@ -28,8 +29,7 @@ class ServerRemove extends Component {
 
   onPress (choice) {
     if (choice === 'yes') {
-      const id = parseInt(this.props.params.id, 10);
-      this.props.dispatch(removeServer(id));
+      this.props.dispatch(removeServer(this.props.params.id));
     }
     this.context.history.goBack();
   }
@@ -47,9 +47,9 @@ class ServerRemove extends Component {
   }
 
   render () {
-    const { servers, params } = this.props;
+    const { items, params } = this.props;
     const { theme } = this.context;
-    const server = servers[parseInt(params.id, 10)];
+    const server = items.find(srv => srv.id === params.id);
     const styles = merge({}, theme.box.normal, theme.box.focus, theme.danger);
     return (
       <box shrink shadow ref="box" position={{ left: 'center', top: 'center', height: 8 }} border="line" style={styles}>

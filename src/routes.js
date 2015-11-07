@@ -17,8 +17,8 @@ export default
       <Router history={history}>
         <Route component={require('./containers/app')}>
           <Route path="server/list" component={require('./containers/server-list')} />
-          <Route path="server/add" component={require('./containers/server-add')} />
-          <Route path="server/:id/edit" component={require('./containers/server-edit')} />
+          <Route path="server/add" component={require('./containers/server-save')} />
+          <Route path="server/:id/edit" component={require('./containers/server-save')} />
           <Route path="server/:id/remove" component={require('./containers/server-remove')} />
           <Route component={require('./containers/connection')}>
             <Route path="server/:id/database/:database" component={require('./containers/database')} />

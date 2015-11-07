@@ -6,8 +6,10 @@ export default class ServerForm extends Component {
 
   static propTypes = {
     onSubmit: PropTypes.func,
+    onCancel: PropTypes.func,
     onFocus: PropTypes.func,
     server: PropTypes.object,
+    error: PropTypes.object,
   };
 
   static contextTypes = {
@@ -17,62 +19,95 @@ export default class ServerForm extends Component {
   constructor (props) {
     super(props);
 
-    this.state = merge({ ssh: {} }, props.server);
+    this.state = { server: props.server };
   }
 
   componentDidMount () {
-    if (this.refs.form) this.refs.form.focusNext();
+    this.refs.form.focusNext();
+
+    this.refs.mysql.uncheck();
+    this.refs.postgresql.uncheck();
+    if (this.state.server && this.state.server.client) {
+      this.refs[this.state.server.client].check();
+    }
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (this.props.server !== nextProps.server) {
+      this.setState({ server: nextProps.server });
+    }
+  }
+
+  componentDidUpdate () {
+    this.refs.mysql.uncheck();
+    this.refs.postgresql.uncheck();
+    if (this.state.server && this.state.server.client) {
+      this.refs[this.state.server.client].check();
+    }
   }
 
   onFocus (name) {
     if (this.props.onFocus) this.props.onFocus(name);
   }
 
-  onBlur (name) {
-    if (name === 'mysql' || name === 'postgresql') {
-      if (this.refs[name].checked) this.setState({ client: name });
-      return;
-    }
+  handleSubmit (data) {
+    const server = {};
 
-    let value = this.refs[name].value;
-
-    const keys = name.split('.');
-
-    if (name === 'port' || keys[1] === 'port') value = parseInt(value, 10) || '';
-
-    if (keys.length === 2 && keys[0] === 'ssh') {
-      this.setState({
-        ssh: {
-          ...this.state.ssh,
-          [keys[1]]: value,
-        },
+    const clients = [ 'mysql', 'postgresql' ];
+    Object.keys(data)
+      .filter(key => data[key]) // ignore falsy
+      .filter(key => key.split('ssh.').length === 1) // ignore ssh
+      .forEach(key => {
+        if (clients.includes(key)) return;
+        server[key] = data[key];
       });
-      return;
+
+    server.client = clients.find(client => data[client]);
+
+    if (this.props.server && this.props.server.id) {
+      server.id = this.props.server.id;
     }
 
-    this.setState({ [name]: value });
-  }
+    Object.keys(data)
+      .filter(key => data[key]) // ignore falsy
+      .map(key => key.split('ssh.'))
+      .filter(keys => keys.length > 1)
+      .map(keys => keys[1])
+      .forEach(key => {
+        server.ssh = server.ssh || {};
+        server.ssh = { ...server.ssh, [key]: data[`ssh.${key}`] };
+      });
 
-  onPress () {
-    if (this.props.onSubmit) this.props.onSubmit(this.state);
+    if (this.props.onSubmit) this.props.onSubmit(server);
+
     this.refs.form.focusNext();
   }
 
+  handleButtonSubmit () {
+    this.refs.form.submit();
+  }
+
+  handleKeypress (ch, key) {
+    if (key.full === 'escape' && this.props.onCancel) this.props.onCancel();
+  }
+
   render () {
-    const server = this.state;
+    const { server } = this.state;
     const { theme } = this.context;
 
     const styles = merge({}, theme.box.normal, theme.box.focus);
+
     return (
       <box
         border="line"
-        label={server ? ' Edit server ' : ' Add server '}
+        label={server && server.id ? ' Edit server ' : ' Add server '}
         style={styles}
         position={{ left: 0, right: 0, top: 0, bottom: 0 }}
       >
         <form
           keys
           ref="form"
+          onSubmit={::this.handleSubmit}
           style={styles}
           position={{ left: 1, right: 1, top: 1, bottom: 1 }}
         >
@@ -85,13 +120,13 @@ export default class ServerForm extends Component {
                   style={styles}
                 />
                 <textbox
-                  keys mouse inputOnFocus
+                  keys inputOnFocus
                   position={{ left: 6, height: 1 }}
                   ref="name"
                   name="name"
-                  value={server.name || ''}
+                  value={server && server.name || ''}
                   onFocus={this.onFocus.bind(this, 'name')}
-                  onBlur={this.onBlur.bind(this, 'name')}
+                  onKeypress={::this.handleKeypress}
                 />
               </box>
               <box position={{ left: 0, top: 2, height: 2 }} style={styles}>
@@ -102,24 +137,24 @@ export default class ServerForm extends Component {
                     style={styles}
                   />
                   <radiobutton
-                    keys mouse
-                    name="client"
+                    keys
+                    name="mysql"
                     position={{ left: 8, top: 0 }}
                     style={styles}
-                    checked={server.client === 'mysql'}
+                    value={server && server.client === 'mysql'}
                     content="MySQL"
                     ref="mysql"
-                    onBlur={this.onBlur.bind(this, 'mysql')}
+                    onKeypress={::this.handleKeypress}
                   />
                   <radiobutton
-                    keys mouse
-                    name="client"
+                    keys
+                    name="postgresql"
                     position={{ left: 18, top: 0 }}
                     style={styles}
-                    checked={server.client === 'postgresql'}
+                    value={server && server.client === 'postgresql'}
                     content="PostgreSQL"
                     ref="postgresql"
-                    onBlur={this.onBlur.bind(this, 'postgresql')}
+                    onKeypress={::this.handleKeypress}
                   />
                 </radioset>
               </box>
@@ -130,13 +165,13 @@ export default class ServerForm extends Component {
                   style={styles}
                 />
                 <textbox
-                  keys mouse inputOnFocus
+                  keys inputOnFocus
                   position={{ left: 6, width: 6, height: 1}}
                   ref="port"
                   name="port"
-                  value={ server.port && server.port.toString() || '' }
+                  value={ server && server.port && server.port.toString() || '' }
                   onFocus={this.onFocus.bind(this, 'port')}
-                  onBlur={this.onBlur.bind(this, 'port')}
+                  onKeypress={::this.handleKeypress}
                 />
                 <text
                   position={{ left: 13 }}
@@ -144,13 +179,13 @@ export default class ServerForm extends Component {
                   style={styles}
                 />
                 <textbox
-                  keys mouse inputOnFocus
+                  keys inputOnFocus
                   position={{ left: 19, height: 1 }}
                   ref="host"
                   name="host"
-                  value={server.host || ''}
+                  value={server && server.host || ''}
                   onFocus={this.onFocus.bind(this, 'host')}
-                  onBlur={this.onBlur.bind(this, 'host')}
+                  onKeypress={::this.handleKeypress}
                 />
               </box>
               <box position={{ left: 0, top: 6, height: 2 }} style={styles}>
@@ -160,13 +195,13 @@ export default class ServerForm extends Component {
                   style={styles}
                 />
                 <textbox
-                  keys mouse inputOnFocus
+                  keys inputOnFocus
                   position={{ left: 13, height: 1 }}
                   ref="socketPath"
                   name="socketPath"
-                  value={server.socketPath || ''}
+                  value={server && server.socketPath || ''}
                   onFocus={this.onFocus.bind(this, 'socketPath')}
-                  onBlur={this.onBlur.bind(this, 'socketPath')}
+                  onKeypress={::this.handleKeypress}
                 />
               </box>
               <box position={{ left: 0, top: 8, height: 2 }} style={styles}>
@@ -176,13 +211,13 @@ export default class ServerForm extends Component {
                   style={styles}
                 />
                 <textbox
-                  keys mouse inputOnFocus
+                  keys inputOnFocus
                   position={{ left: 6, height: 1 }}
                   ref="user"
                   name="user"
-                  value={server.user || ''}
+                  value={server && server.user || ''}
                   onFocus={this.onFocus.bind(this, 'user')}
-                  onBlur={this.onBlur.bind(this, 'user')}
+                  onKeypress={::this.handleKeypress}
                 />
               </box>
               <box position={{ left: 0, top: 10, height: 2 }} style={styles}>
@@ -192,13 +227,13 @@ export default class ServerForm extends Component {
                   style={styles}
                 />
                 <textbox
-                  censor keys mouse inputOnFocus
+                  censor keys inputOnFocus
                   position={{ left: 10, height: 1 }}
                   ref="password"
                   name="password"
-                  value={server.password || ''}
+                  value={server && server.password || ''}
                   onFocus={this.onFocus.bind(this, 'password')}
-                  onBlur={this.onBlur.bind(this, 'password')}
+                  onKeypress={::this.handleKeypress}
                 />
               </box>
               <box position={{ left: 0, top: 12, height: 2 }} style={styles}>
@@ -208,13 +243,13 @@ export default class ServerForm extends Component {
                   style={styles}
                 />
                 <textbox
-                  keys mouse inputOnFocus
+                  keys inputOnFocus
                   position={{ left: 10, height: 1 }}
                   ref="database"
                   name="database"
-                  value={server.database || ''}
+                  value={server && server.database || ''}
                   onFocus={this.onFocus.bind(this, 'database')}
-                  onBlur={this.onBlur.bind(this, 'database')}
+                  onKeypress={::this.handleKeypress}
                 />
               </box>
             </box>
@@ -232,13 +267,13 @@ export default class ServerForm extends Component {
                   style={styles}
                 />
                 <textbox
-                  keys mouse inputOnFocus
+                  keys inputOnFocus
                   position={{ left: 6, width: 6, height: 1 }}
                   ref="ssh.port"
                   name="ssh.port"
-                  value={server.ssh && server.ssh.port && server.ssh.port.toString() || ''}
+                  value={server && server.ssh && server.ssh.port && server.ssh.port.toString() || ''}
                   onFocus={this.onFocus.bind(this, 'ssh.port')}
-                  onBlur={this.onBlur.bind(this, 'ssh.port')}
+                  onKeypress={::this.handleKeypress}
                 />
                 <text
                   position={{ left: 13 }}
@@ -246,13 +281,13 @@ export default class ServerForm extends Component {
                   style={styles}
                 />
                 <textbox
-                  keys mouse inputOnFocus
+                  keys inputOnFocus
                   position={{ left: 19, height: 1 }}
                   ref="ssh.host"
                   name="ssh.host"
                   value={server && server.ssh && server.ssh.host || ''}
                   onFocus={this.onFocus.bind(this, 'ssh.host')}
-                  onBlur={this.onBlur.bind(this, 'ssh.host')}
+                  onKeypress={::this.handleKeypress}
                 />
               </box>
               <box position={{ left: 0, top: 2, height: 2 }} style={styles}>
@@ -262,13 +297,13 @@ export default class ServerForm extends Component {
                   style={styles}
                 />
                 <textbox
-                  keys mouse inputOnFocus
+                  keys inputOnFocus
                   position={{ left: 6, height: 1 }}
                   ref="ssh.user"
                   name="ssh.user"
                   value={server && server.ssh && server.ssh.user || ''}
                   onFocus={this.onFocus.bind(this, 'ssh.user')}
-                  onBlur={this.onBlur.bind(this, 'ssh.user')}
+                  onKeypress={::this.handleKeypress}
                 />
               </box>
               <box position={{ left: 0, top: 4, height: 2 }} style={styles}>
@@ -278,13 +313,13 @@ export default class ServerForm extends Component {
                   style={styles}
                 />
                 <textbox
-                  keys mouse censor inputOnFocus
+                  keys censor inputOnFocus
                   position={{ left: 10, height: 1 }}
                   ref="ssh.password"
                   name="ssh.password"
                   value={server && server.ssh && server.ssh.password || ''}
                   onFocus={this.onFocus.bind(this, 'ssh.password')}
-                  onBlur={this.onBlur.bind(this, 'ssh.password')}
+                  onKeypress={::this.handleKeypress}
                 />
               </box>
               <box position={{ left: 0, top: 6, height: 2 }} style={styles}>
@@ -294,13 +329,13 @@ export default class ServerForm extends Component {
                   style={styles}
                 />
                 <textbox
-                  keys mouse inputOnFocus
+                  keys inputOnFocus
                   position={{ left: 13, height: 1 }}
                   ref="ssh.privateKey"
                   name="ssh.privateKey"
                   value={server && server.ssh && server.ssh.privateKey || ''}
                   onFocus={this.onFocus.bind(this, 'ssh.privateKey')}
-                  onBlur={this.onBlur.bind(this, 'ssh.privateKey')}
+                  onKeypress={::this.handleKeypress}
                 />
               </box>
             </box>
@@ -310,11 +345,12 @@ export default class ServerForm extends Component {
             style={styles}
             border="line">
             <button
-              keys mouse
+              keys
               position={{ left: 1, height: 1, width: 8 }}
               style={theme.button}
-              onPress={::this.onPress}
+              onPress={::this.handleButtonSubmit}
               content=" Submit "
+              onKeypress={::this.handleKeypress}
             />
           </box>
         </form>

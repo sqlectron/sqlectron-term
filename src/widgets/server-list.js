@@ -22,6 +22,10 @@ export default class ServerList extends Component {
     if (this.refs.list) this.refs.list.focus();
   }
 
+  componentDidUpdate () {
+    if (this.refs.list) this.refs.list.focus();
+  }
+
   selected () {
     if (this.refs.list) return this.refs.list.selected;
     return 0;

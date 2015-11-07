@@ -53,7 +53,7 @@ function mapStateToProps (state, props) {
   const isSameServer =
       connections
       && connections.server
-      && connections.server.id === parseInt(props.params.id, 10)
+      && connections.server.id === props.params.id
       && connections.database === props.params.database;
 
   return { ...connections, isSameServer: !!isSameServer };

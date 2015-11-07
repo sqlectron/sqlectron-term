@@ -6,11 +6,9 @@ export const DB_CONNECT_FAILURE = 'DB_CONNECT_FAILURE';
 
 
 export function connectIfNeeded (serverId, database) {
-  const id = parseInt(serverId, 10);
-
   return (dispatch, getState) => {
-    if (shouldConnect(id, database, getState())) {
-      return dispatch(connect(id, database));
+    if (shouldConnect(serverId, database, getState())) {
+      return dispatch(connect(serverId, database));
     }
   };
 }
@@ -33,11 +31,7 @@ function shouldConnect(serverId, database, state) {
 function connect (serverId, database) {
   return async (dispatch, getState) => {
     const { servers } = getState();
-    const server = {
-      ...servers.servers[serverId],
-      id: serverId,
-    };
-
+    const server = servers.items.find(item => item.id === serverId);
     dispatch({ type: DB_CONNECT_REQUEST, server, database });
     try {
       await service.connect(server, database);
