@@ -3,7 +3,7 @@ import {
   DB_CONNECT_SUCCESS,
   DB_CONNECT_FAILURE,
 } from '../actions/connections';
-import { UPDATE_SERVER_SUCCESS } from '../actions/servers';
+import { SAVE_SERVER_SUCCESS } from '../actions/servers';
 
 
 const initialState = {
@@ -13,9 +13,8 @@ const initialState = {
 
 export default function (state = initialState, action) {
   switch (action.type) {
-  case UPDATE_SERVER_SUCCESS: {
-    const id = parseInt(action.id, 10);
-    if (state.server && id === state.server.id) {
+  case SAVE_SERVER_SUCCESS: {
+    if (state.server && action.server.id === state.server.id) {
       return { ...state, didInvalidate: true };
     }
     return state;
