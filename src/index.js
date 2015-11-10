@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 import 'react';
 import blessed from 'blessed';
 import { render } from 'react-blessed';
