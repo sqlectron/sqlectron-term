@@ -1,6 +1,6 @@
 {
   "name": "sqlectron-term",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "sqlectron command line interface",
   "main": "lib/index.js",
   "scripts": {
