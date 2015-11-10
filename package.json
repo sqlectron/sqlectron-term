@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "description": "sqlectron command line interface",
   "main": "lib/index.js",
+  "preferGlobal": true,
+  "bin": {
+    "sqlectron-term": "./bin/sqlectron-term.js"
+  },
   "scripts": {
     "test": "npm run lint",
     "lint": "eslint src",
