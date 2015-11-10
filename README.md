@@ -1,14 +1,65 @@
-# sqlectron-term
-sqlectron terminal-based interface
+![SQLECTRON Logo](https://www.dropbox.com/s/dt06tif4xo1khbf/SQLECTRON-400px.png?raw=1)
 
-## development
+A simple and lightweight SQL client with cross database and platform support.
+
+![demo](https://www.dropbox.com/s/kfif9uawxba0z89/output.gif?raw=1)
+
+#### Current supported databases
+* PostgreSQL
+* MySQL
+
+Do you wanna support for another SQL database? Please send a pull request to [sqlectron-core](https://github.com/sqlectron/sqlectron-core).
+
+## Install
+
+```bash
+npm install -g sqlectron-term
+```
+
+## GUI
+
+SQLECTRON has also a GUI interface called [sqlectron-gui](https://github.com/sqlectron/sqlectron-gui).
+
+## Configuration
+
+Example configuration file `~/.sqlectron.json`
+```json
+{
+  "servers": [
+    {
+      "name": "postgres",
+      "client": "postgresql",
+      "host": "10.10.10.10",
+      "port": 5432,
+      "database": "postgres",
+      "user": "user",
+      "password": "password"
+    },
+    {
+      "name": "mysql",
+      "client": "mysql",
+      "host": "10.10.10.10",
+      "port": 3306,
+      "database": "authentication",
+      "user": "root",
+      "password": "password"
+    }
+  ]
+}
+```
+
+Although you should not care about this file. Because SQLECTRON will manage it for you.
+
+## Development
+
 Running the application:
+
 ```bash
 npm install
 npm run dev
 ```
 
-## routes
+### Routes
 
 - /server/list
 - /server/add
@@ -17,14 +68,14 @@ npm run dev
 - /server/:id/database/:database
 - /server/:id/database/:database/databases
 
-## features
+### Features
 
 - manage servers
 - list databases
 - list tables
 - execute query
 
-## todo
+### TODO
 
 - [x] highlight box based on focus
 - [x] create shortcuts component with ability to add and remove shortcuts on focus / blur
