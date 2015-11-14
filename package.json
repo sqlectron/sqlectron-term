@@ -57,6 +57,6 @@
     "react-router": "^1.0.0-rc1",
     "redux": "^3.0.0",
     "redux-thunk": "^0.1.0",
-    "sqlectron-core": "^0.3.0"
+    "sqlectron-core": "^0.3.1"
   }
 }
