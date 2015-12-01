@@ -1,6 +1,6 @@
 {
   "name": "sqlectron-term",
-  "version": "0.1.5",
+  "version": "1.0.0",
   "dependencies": {
     "babel-polyfill": {
       "version": "6.0.16",
