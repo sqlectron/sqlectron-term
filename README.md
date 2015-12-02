@@ -4,7 +4,7 @@
 
 A simple and lightweight SQL client with cross database and platform support.
 
-![demo](https://www.dropbox.com/s/kfif9uawxba0z89/output.gif?raw=1)
+![demo](https://sqlectron.github.io/demos/sqlectron-demo-term-v1.0.0.gif)
 
 #### Current supported databases
 * PostgreSQL
