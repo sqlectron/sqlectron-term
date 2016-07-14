@@ -10,7 +10,7 @@
 * PostgreSQL
 * MySQL
 
-Do you wanna support for another SQL database? Please send a pull request to [sqlectron-core](https://github.com/sqlectron/sqlectron-core).
+Do you want support for another SQL database? Please send a pull request to [sqlectron-core](https://github.com/sqlectron/sqlectron-core).
 
 ## Install
 
@@ -24,7 +24,7 @@ SQLECTRON has also a GUI interface called [sqlectron-gui](https://github.com/sql
 
 ## Configuration
 
-See the available configuration at [here](https://github.com/sqlectron/sqlectron-core#configuration).
+See the available configuration [here](https://github.com/sqlectron/sqlectron-core#configuration).
 
 ## Development
 
