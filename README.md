@@ -10,7 +10,7 @@
 * PostgreSQL
 * MySQL
 
-Do you want support for another SQL database? Please send a pull request to [sqlectron-core](https://github.com/sqlectron/sqlectron-core).
+Do you want to support another SQL database? Please send a pull request to [sqlectron-core](https://github.com/sqlectron/sqlectron-core).
 
 ## Install
 
